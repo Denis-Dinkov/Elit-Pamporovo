@@ -1,22 +1,26 @@
 /* Шрифтове — хостнати локално, зареждат се само нужните символи */
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/playfair-display-cyrillic-500-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/playfair-display-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:optional;src:url(/fonts/playfair-display-cyrillic-500-italic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:optional;src:url(/fonts/playfair-display-latin-500-italic.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/playfair-display-cyrillic-700-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:'Playfair Display';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/playfair-display-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/nunito-sans-cyrillic-400-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/nunito-sans-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/nunito-sans-cyrillic-600-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/nunito-sans-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/playfair-display-cyrillic-500-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/playfair-display-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/fonts/playfair-display-cyrillic-500-italic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:500;font-display:swap;src:url(/fonts/playfair-display-latin-500-italic.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/playfair-display-cyrillic-700-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/playfair-display-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/nunito-sans-cyrillic-400-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/nunito-sans-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/nunito-sans-cyrillic-600-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/nunito-sans-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* Резервни шрифтове с изравнени метрики — текстът се вижда веднага и не подскача при смяната */
+@font-face{font-family:'Playfair Display Fallback';src:local('Georgia');ascent-override:106.716%;descent-override:24.7558%;line-gap-override:0%;size-adjust:101.3906%}
+@font-face{font-family:'Nunito Sans Fallback';src:local('Arial'),local('ArialMT');ascent-override:99.7134%;descent-override:34.8159%;line-gap-override:0%;size-adjust:101.3906%}
 
 /* Стил „Здрач над шалето" (по BelArosa Chalet) */
 :root{
   --slate:#193741; --teal:#1d414d; --gold:#eac486;
   --stone:#55666c; --muted:#41575e; --line:#dcd8d1;
   --parchment:#ebe7e1; --snow:#fff;
-  --serif:'Playfair Display',Georgia,'Times New Roman',serif;
-  --sans:'Nunito Sans','Segoe UI',system-ui,-apple-system,sans-serif;
+  --serif:'Playfair Display','Playfair Display Fallback',Georgia,'Times New Roman',serif;
+  --sans:'Nunito Sans','Nunito Sans Fallback','Segoe UI',system-ui,-apple-system,sans-serif;
   --r:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -163,17 +167,23 @@ section{padding:clamp(64px,9vw,104px) 0}
 .faq p{margin-top:12px;color:var(--muted)}
 
 /* Запитване */
-.book{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(32px,5vw,64px)}
+.book{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(32px,5vw,64px)}
 .contact{margin-top:28px;font-size:16px;line-height:2.1;list-style:none}
-.form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
 .form label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;display:flex;flex-direction:column;gap:7px}
 .form .full{grid-column:1/-1}
+.form label{min-width:0}
 .form input,.form select,.form textarea{font:400 16px var(--sans);letter-spacing:0;text-transform:none;padding:12px 15px;border:1px solid #b3bec0;border-radius:var(--r);background:var(--snow);color:var(--slate);min-height:48px;width:100%}
+/* iOS Safari: полетата за дата имат собствена минимална ширина — ограничаваме я; стрелка и календар като фон */
+.form label select{-webkit-appearance:none;appearance:none;background:var(--snow) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23193741' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 16px center/12px 8px;padding-right:44px}
+.form label input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;text-align:left;background:var(--snow) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='%23193741' stroke-width='1.3'%3E%3Crect x='2' y='3.5' width='14' height='12.5' rx='2'/%3E%3Cpath d='M2 7.5h14M6 2v3M12 2v3'/%3E%3C/svg%3E") no-repeat right 16px center/18px 18px;padding-right:48px}
+.form label input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
+.form label input[type=date]::-webkit-calendar-picker-indicator{opacity:0}
 .form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--slate)}
 .form .btn{grid-column:1/-1;justify-self:start}
 .form__ok{grid-column:1/-1;font:italic 500 19px var(--serif)}
-@media (max-width:860px){.book{grid-template-columns:1fr}}
-@media (max-width:480px){.form{grid-template-columns:1fr}.form .btn{width:100%}}
+@media (max-width:860px){.book{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:480px){.form{grid-template-columns:minmax(0,1fr)}.form .btn{width:100%}}
 
 /* Страница апартамент */
 .crumbs{font-size:13px;color:var(--stone);padding:20px 0 0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
@@ -186,7 +196,7 @@ section{padding:clamp(64px,9vw,104px) 0}
 .apt-hero picture{display:block;min-width:0;min-height:0;height:100%;overflow:hidden;border-radius:var(--r)}
 .apt-hero img{display:block;width:100%;height:100%;object-fit:cover}
 .apt-hero .stack{display:grid;gap:10px;grid-auto-rows:minmax(0,1fr);min-height:0;height:100%}
-.apt-body{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(32px,5vw,72px);padding:56px 0}
+.apt-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);padding:56px 0}
 .apt-body p{margin-bottom:18px;color:var(--muted);font-size:18px}
 .aside{border:1px solid var(--line);border-radius:var(--r);padding:28px;align-self:start;position:sticky;top:96px}
 .aside dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:8px 0 24px;font-size:15px}
@@ -197,7 +207,7 @@ section{padding:clamp(64px,9vw,104px) 0}
 .amen li::before{content:"";position:absolute;left:0;top:15px;width:10px;height:1px;background:var(--gold)}
 .grid-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px}
 .grid-photos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r)}
-@media (max-width:860px){.apt-body{grid-template-columns:1fr}.aside{position:static;order:-1}.apt-hero{grid-template-columns:minmax(0,1fr);height:auto}.apt-hero > picture{aspect-ratio:4/3;height:auto}.apt-hero .stack{grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);grid-auto-rows:auto;height:auto}.apt-hero .stack picture{aspect-ratio:1;height:auto}.apt-hero .stack picture:only-child{aspect-ratio:3/2}.grid-photos{grid-template-columns:1fr 1fr}}
+@media (max-width:860px){.apt-body{grid-template-columns:minmax(0,1fr)}.aside{position:static;order:-1}.apt-hero{grid-template-columns:minmax(0,1fr);height:auto}.apt-hero > picture{aspect-ratio:4/3;height:auto}.apt-hero .stack{grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);grid-auto-rows:auto;height:auto}.apt-hero .stack picture{aspect-ratio:1;height:auto}.apt-hero .stack picture:only-child{aspect-ratio:3/2}.grid-photos{grid-template-columns:1fr 1fr}}
 @media (max-width:480px){.amen{columns:1}}
 
 /* Отзиви */

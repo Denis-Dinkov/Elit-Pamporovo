@@ -1,0 +1,146 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "astro",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/bg/",
+      "statusCode": 301
+    },
+    {
+      "source": "/index.php",
+      "destination": "/bg/",
+      "statusCode": 301
+    },
+    {
+      "source": "/bg/blog",
+      "destination": "/bg/blog/ski-v-pamporovo/",
+      "statusCode": 301
+    },
+    {
+      "source": "/bg/blog/",
+      "destination": "/bg/blog/ski-v-pamporovo/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/blog",
+      "destination": "/en/blog/skining-pamporovo/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/blog/",
+      "destination": "/en/blog/skining-pamporovo/",
+      "statusCode": 301
+    },
+    {
+      "source": "/bg/apartments",
+      "destination": "/bg/apartamenti/",
+      "statusCode": 301
+    },
+    {
+      "source": "/bg/apartments/",
+      "destination": "/bg/apartamenti/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/apartamenti",
+      "destination": "/en/apartments/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/apartamenti/",
+      "destination": "/en/apartments/",
+      "statusCode": 301
+    },
+    {
+      "source": "/bg/rhodope-paradise",
+      "destination": "/bg/rodopski-rai/",
+      "statusCode": 301
+    },
+    {
+      "source": "/bg/rhodope-paradise/",
+      "destination": "/bg/rodopski-rai/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/rodopski-rai",
+      "destination": "/en/rhodope-paradise/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/rodopski-rai/",
+      "destination": "/en/rhodope-paradise/",
+      "statusCode": 301
+    },
+    {
+      "source": "/images/:path*",
+      "destination": "/bg/",
+      "statusCode": 301
+    },
+    {
+      "source": "/bg/ema-apart",
+      "destination": "/bg/apartamenti/",
+      "statusCode": 301
+    },
+    {
+      "source": "/bg/ema-apart/",
+      "destination": "/bg/apartamenti/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/ema-apart",
+      "destination": "/en/apartments/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/ema-apart/",
+      "destination": "/en/apartments/",
+      "statusCode": 301
+    }
+  ],
+  "headers": [
+    {
+      "source": "/_astro/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(logo.svg|favicon.svg|favicon-32.png|apple-touch-icon.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ]
+}
