@@ -1,0 +1,14 @@
+# Пренасочвания (Cloudflare Pages / Netlify) — пазят старите адреси от Joomla сайта
+/                 /bg/              301
+/index.php        /bg/              301
+/bg/blog          /bg/blog/ski-v-pamporovo/   301
+/en/blog          /en/blog/skining-pamporovo/ 301
+/bg/apartments    /bg/apartamenti/  301
+/en/apartamenti   /en/apartments/   301
+/bg/rhodope-paradise  /bg/rodopski-rai/      301
+/en/rodopski-rai      /en/rhodope-paradise/  301
+/images/*         /bg/              301
+/bg/ema-apart     /bg/apartamenti/  301
+/bg/ema-apart/    /bg/apartamenti/  301
+/en/ema-apart     /en/apartments/   301
+/en/ema-apart/    /en/apartments/   301

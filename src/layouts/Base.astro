@@ -1,0 +1,126 @@
+---
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { SITE, t, type Lang } from '../data/site';
+import defaultOg from '../assets/photos/common/pamporovo-lift-zima-ski.jpg';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Пътят на същата страница на другия език, напр. { bg: '/bg/', en: '/en/' } */
+  alternates: { bg: string; en: string };
+  ogImage?: ImageMetadata;
+  jsonLd?: object[];
+  heroPreload?: string;
+  transparentNav?: boolean;
+}
+
+const { lang, title, description, alternates, ogImage = defaultOg, jsonLd = [], transparentNav = false } = Astro.props;
+const s = t[lang];
+const canonical = new URL(alternates[lang], SITE.url).href;
+const og = await getImage({ src: ogImage, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const ogUrl = new URL(og.src, SITE.url).href;
+const otherLang: Lang = lang === 'bg' ? 'en' : 'bg';
+const navLinks = [
+  { href: s.home + '#day', label: s.nav.day },
+  { href: s.apartments, label: s.nav.apartments },
+  { href: s.blog, label: s.nav.ski },
+];
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  <link rel="alternate" hreflang="bg" href={new URL(alternates.bg, SITE.url).href}>
+  <link rel="alternate" hreflang="en" href={new URL(alternates.en, SITE.url).href}>
+  <link rel="alternate" hreflang="x-default" href={new URL(alternates.bg, SITE.url).href}>
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#193741">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml">
+  <link rel="sitemap" href="/sitemap-index.xml">
+
+  <link rel="preload" href={`/fonts/playfair-display-${lang === 'bg' ? 'cyrillic' : 'latin'}-700-normal.woff2`} as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href={`/fonts/nunito-sans-${lang === 'bg' ? 'cyrillic' : 'latin'}-400-normal.woff2`} as="font" type="font/woff2" crossorigin>
+  <slot name="head" />
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content={lang === 'bg' ? SITE.name : SITE.nameEn}>
+  <meta property="og:locale" content={lang === 'bg' ? 'bg_BG' : 'en_US'}>
+  <meta property="og:locale:alternate" content={lang === 'bg' ? 'en_US' : 'bg_BG'}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogUrl}>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+</head>
+<body>
+  <a class="skip" href="#main">{lang === 'bg' ? 'Към съдържанието' : 'Skip to content'}</a>
+  <header class:list={['nav', { 'nav--clear': transparentNav }]} id="nav">
+    <div class="wrap nav__in">
+      <a class="logo" href={s.home}>
+        <span class="logo__mark" aria-hidden="true"></span><span class="sr">{lang === 'bg' ? SITE.name : SITE.nameEn}</span>
+      </a>
+      <nav class="nav__links" aria-label={lang === 'bg' ? 'Основно меню' : 'Main menu'}>
+        {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+        <a href={alternates[otherLang]} hreflang={otherLang} lang={otherLang} class="nav__lang">{s.other}</a>
+        <a href={s.home + '#book'} class="btn btn--sm">{s.nav.book}</a>
+        <details class="menu">
+          <summary aria-label={lang === 'bg' ? 'Меню' : 'Menu'}><span></span><span></span><span></span></summary>
+          <div class="menu__panel">
+            <a href={s.home}>{s.breadcrumbsHome}</a>
+            {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+            <a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a>
+            <a href={alternates[otherLang]} hreflang={otherLang} lang={otherLang}>{s.other}</a>
+          </div>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <footer class="footer">
+    <div class="wrap footer__grid">
+      <div>
+        <a class="logo" href={s.home}><span class="logo__mark logo__mark--lg" aria-hidden="true"></span><span class="sr">{lang === 'bg' ? SITE.name : SITE.nameEn}</span></a>
+        <p class="footer__txt">{s.footer}</p>
+      </div>
+      <div>
+        <p class="eyebrow">{s.nav.apartments}</p>
+        <slot name="footer-apartments" />
+      </div>
+      <div>
+        <p class="eyebrow">{lang === 'bg' ? 'Контакти' : 'Contact'}</p>
+        <ul class="footer__list">
+          <li><a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a></li>
+          <li><a href={`viber://chat?number=%2B${SITE.phone.slice(1)}`}>Viber</a> · <a href={`https://wa.me/${SITE.phone.slice(1)}`} rel="noopener">WhatsApp</a></li>
+          <li>{SITE.locality[lang]}, {SITE.region[lang]}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap footer__bottom">© {new Date().getFullYear()} {lang === 'bg' ? SITE.name : SITE.nameEn}</div>
+  </footer>
+
+  <a class="callfab" href={`tel:${SITE.phone}`} aria-label={s.call}>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+  </a>
+
+  <script is:inline>
+    (function(){var m=document.querySelector('.menu');if(!m)return;m.addEventListener('click',function(e){if(e.target.closest('a'))m.open=false});document.addEventListener('click',function(e){if(m.open&&!m.contains(e.target))m.open=false});})();
+    (function(){var n=document.getElementById('nav');if(!n.classList.contains('nav--clear'))return;var f=function(){n.classList.toggle('nav--solid',scrollY>60)};addEventListener('scroll',f,{passive:true});f();})();
+  </script>
+</body>
+</html>

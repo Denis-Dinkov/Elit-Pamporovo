@@ -1,0 +1,27 @@
+---
+import Photo from './Photo.astro';
+import { t, type Lang } from '../data/site';
+import type { Apartment } from '../data/apartments';
+
+interface Props { apt: Apartment; lang: Lang; headingLevel?: 'h2' | 'h3' }
+const { apt, lang, headingLevel = 'h3' } = Astro.props;
+const s = t[lang];
+const H = headingLevel;
+const href = `/${lang}/${apt.slug[lang]}/`;
+---
+<a class="card" href={href}>
+  <div class="card__img">
+    <Photo src={apt.cover.src} alt={apt.cover.alt[lang]} sizes="(max-width: 760px) 100vw, 600px" />
+    <span class="tag">{s.guests(apt.guests)}</span>
+  </div>
+  <H>{apt.name[lang]}</H>
+  <p class="sub">{apt.tagline[lang]}</p>
+  <p>{apt.intro[lang]}</p>
+  <ul class="specs">
+    <li>{s.bedrooms(apt.bedrooms)}</li>
+    <li>{apt.size} {lang === 'bg' ? 'м²' : 'm²'}</li>
+    <li>{s.floor(apt.floor)}</li>
+    <li>{s.view}</li>
+  </ul>
+  <span class="more">{s.more} {apt.name[lang]} →</span>
+</a>

@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import ApartmentCard from '../ApartmentCard.astro';
+import BookingForm from '../BookingForm.astro';
+import { SITE, t, type Lang } from '../../data/site';
+import { apartments } from '../../data/apartments';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const bg = lang === 'bg';
+const s = t[lang];
+const alternates = { bg: '/bg/apartamenti/', en: '/en/apartments/' };
+const title = bg
+  ? 'Апартаменти в Пампорово под наем — 3 апартамента до ски център Малина'
+  : 'Apartments in Pamporovo for Rent — 3 Holiday Apartments near Malina Ski Center';
+const desc = bg
+  ? 'Сравнете нашите 3 апартамента в Пампорово: с една или две спални, за 4–5 гости, 60–68 м², с тераса към гората и оборудвана кухня. Близо до ски център Малина.'
+  : 'Compare our 3 apartments in Pamporovo: one or two bedrooms, 4–5 guests, 60–68 m², forest-view terrace and full kitchen. Close to Malina Ski Center.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: apartments.map((a, i) => ({
+      '@type': 'ListItem', position: i + 1, name: a.name[lang], url: new URL(`/${lang}/${a.slug[lang]}/`, SITE.url).href,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: s.breadcrumbsHome, item: new URL(s.home, SITE.url).href },
+      { '@type': 'ListItem', position: 2, name: s.nav.apartments, item: new URL(s.apartments, SITE.url).href },
+    ],
+  },
+];
+---
+<Base lang={lang} title={title} description={desc} alternates={alternates} jsonLd={jsonLd}>
+  <Fragment slot="footer-apartments">
+    <ul class="footer__list">{apartments.map((a) => <li><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></li>)}</ul>
+  </Fragment>
+  <div class="wrap">
+    <ol class="crumbs"><li><a href={s.home}>{s.breadcrumbsHome}</a></li><li aria-current="page">{s.nav.apartments}</li></ol>
+  </div>
+  <section style="padding-top:40px">
+    <div class="wrap">
+      <span class="eyebrow">{bg ? 'Пампорово · ски център Малина' : 'Pamporovo · Malina Ski Center'}</span>
+      <h1 style="max-width:900px">{bg ? 'Апартаменти под наем в Пампорово' : 'Holiday apartments in Pamporovo'}</h1>
+      <p class="lead" style="margin-top:20px">
+        {bg
+          ? 'Три светли апартамента в комплекс „Елит Пампорово", сред смърчовата гора и близо до пистите. Всеки е с тераса към гората, оборудвана кухня и всичко за спокойна зимна или лятна почивка.'
+          : 'Three bright apartments in the Elit Pamporovo complex, set in the spruce forest close to the slopes. Each has a forest-view terrace, a fully equipped kitchen and everything for a relaxed winter or summer stay.'}
+      </p>
+      <div class="cards">{apartments.map((a) => <ApartmentCard apt={a} lang={lang} headingLevel="h2" />)}</div>
+    </div>
+  </section>
+  <BookingForm lang={lang} />
+</Base>

@@ -1,0 +1,271 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../Photo.astro';
+import ApartmentCard from '../ApartmentCard.astro';
+import BookingForm from '../BookingForm.astro';
+import { SITE, t, type Lang } from '../../data/site';
+import { apartments } from '../../data/apartments';
+import { getImage } from 'astro:assets';
+
+import heroImg from '../../assets/photos/common/pamporovo-lift-zima-ski.jpg';
+import coffee from '../../assets/photos/forest-dream/morning-coffee.jpg';
+import piste from '../../assets/photos/common/zima-pisti-pamporovo.jpg';
+import deer from '../../assets/photos/common/deer2.jpg';
+import evening from '../../assets/photos/forest-dream/pochivka-v-pamporovo.jpg';
+import snezhanka from '../../assets/photos/common/pochivka-pamporovo-zima-ski.jpg';
+import snowyForest from '../../assets/photos/common/pochivka-v-pamporovo-malini.jpg';
+import forest from '../../assets/photos/common/views2.jpg';
+import bird from '../../assets/photos/forest-dream/ski-vacancia-pamporovo.jpg';
+import terrace from '../../assets/photos/rodopski-rai/rodopski-rai-terasa-sniag.jpg';
+import living from '../../assets/photos/deers-home/deershome1.jpg';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const bg = lang === 'bg';
+const s = t[lang];
+
+const C = bg ? {
+  title: 'Апартаменти под наем в Пампорово до ски център Малина | Елит Пампорово',
+  desc: '3 уютни апартамента в Пампорово с изглед към гората, близо до ски център Малина. За 4–5 гости, оборудвана кухня, тераса. Резервации: 0886 86 70 53.',
+  eyebrow: 'Пампорово · Родопите · ски център Малина',
+  h1: ['Апартаменти в Пампорово за зима, която ', 'ще помните'],
+  lead: 'Три уютни апартамента сред смърчовата гора, близо до ски център Малина. Сутрин — пресен сняг и слънце. Вечер — топлина, настолни игри и тишина, каквато в града няма.',
+  cta1: 'Провери свободни дати', cta2: 'Разгледай апартаментите',
+  facts: [['3', 'апартамента'], ['до 5', 'гости'], ['60–68 м²', 'простор']],
+  promiseEyebrow: 'Защо хората се връщат',
+  promise: '„Не наемате просто апартамент. Наемате седмица, за която ще разказвате до следващата зима."',
+  promiseText: 'Подредихме всеки апартамент така, както бихме искали да посрещнат нас — светло, топло, с всичко нужно за ски ваканция и с тераса, от която гледате гората.',
+  dayEyebrow: 'Един ден в Пампорово', dayH: 'От първото кафе до последната партия карти',
+  dayLead: 'Тук денят има свой ритъм. Никакви аларми, никакво бързане — само сняг, планина и хората, с които сте дошли.',
+  day: [
+    ['08:00', 'Сутрин', 'Будите се от тишината. Смърчовете са побелели през нощта, а кафето ухае, докато гледате гората от прозореца.'],
+    ['10:00', 'На пистите', 'Ски център Малина е съвсем близо. Пампорово е известно със слънчевите си зимни дни — пухкав сняг под синьо небе.'],
+    ['15:00', 'Следобед', 'Разходка по заснежените пътеки, където сърничките идват почти до терасата. Децата не вярват на очите си.'],
+    ['20:00', 'Вечер', 'Голям диван, книги, настолни игри и чаша родопско вино. Тук вечерите стават най-хубавата част от деня.'],
+  ],
+  aptEyebrow: 'Апартаментите', aptH: 'Три дома в гората. Изберете своя.',
+  winterEyebrow: 'Ски почивка в Пампорово', winterH: 'Сняг, слънце и писти за всеки',
+  winterText: 'Пампорово е от най-слънчевите ски курорти в България и отлично място за начинаещи и семейства. От първите плахи завои на децата до черната „Стена" — има писта за всеки. А когато краката кажат „стига" — разходки в гората, шейни и родопска кухня.',
+  stats: [['1926 м', 'връх Снежанка'], ['~30 км', 'ски писти'], ['13', 'лифта'], ['дек – апр', 'ски сезон']],
+  guide: 'Пълен наръчник за ски в Пампорово →',
+  whyEyebrow: 'Помислили сме за всичко', whyH: 'Вие носите само ските и доброто настроение',
+  why: [
+    ['До пистите', 'Комплексът е близо до ски център Малина — повече време на снега, по-малко в колата.'],
+    ['Сухи и топли', 'Пералня и сушилня в апартаментите — сутрин обувате сухи и топли дрехи.'],
+    ['Гората до вас', 'Тераса с изглед към гората, птички и сърнички — природата е част от престоя.'],
+    ['Лично отношение', 'Говорите директно със собствениците — без посредници и без скрити такси.'],
+  ],
+  faqH: 'Често задавани въпроси',
+  faq: [
+    ['Колко близо са апартаментите до пистите?', 'Комплекс „Елит Пампорово" се намира близо до ски център Малина в Пампорово. Обадете се и ще ви разкажем как най-лесно да стигнете до лифта.'],
+    ['Колко души могат да отседнат?', 'Forest Dream и Родопски рай са с една спалня и побират до 4 гости. Deer\'s Home е с две спални и побира до 5 гости.'],
+    ['Какво е включено в апартаментите?', 'Всички апартаменти имат напълно оборудвана кухня със съдомиялна и кафе машина, тераса с изглед към гората, телевизор и безплатен интернет. Всички имат и пералня със сушилня.'],
+    ['Подходящи ли са апартаментите и за лятна почивка?', 'Да. Лятото в Родопите е прохладно и зелено — идеално за разходки в гората, планинско колоездене и почивка далеч от жегата.'],
+    ['Как да направя резервация?', `Обадете се на ${SITE.phoneDisplay}, пишете ни във Viber или WhatsApp, или изпратете запитване през формата на сайта.`],
+  ],
+} : {
+  title: 'Pamporovo Apartments for Rent near Malina Ski Center | Elit Pamporovo',
+  desc: '3 cozy apartments in Pamporovo, Bulgaria with forest views, close to Malina Ski Center. Sleep 4–5 guests, full kitchen, terrace. Book: +359 886 86 70 53.',
+  eyebrow: 'Pamporovo · Rhodope Mountains · Malina Ski Center',
+  h1: ['Pamporovo apartments for a winter ', 'you will remember'],
+  lead: 'Three cozy apartments in the spruce forest, close to Malina Ski Center. Mornings of fresh snow and sunshine. Evenings of warmth, board games and a silence the city never has.',
+  cta1: 'Check availability', cta2: 'See the apartments',
+  facts: [['3', 'apartments'], ['up to 5', 'guests'], ['60–68 m²', 'of space']],
+  promiseEyebrow: 'Why guests come back',
+  promise: '"You are not just renting an apartment. You are renting a week you will talk about until next winter."',
+  promiseText: 'We set up each apartment the way we would want to be welcomed — bright, warm, with everything a ski holiday needs and a terrace overlooking the forest.',
+  dayEyebrow: 'A day in Pamporovo', dayH: 'From the first coffee to the last card game',
+  dayLead: 'Days here have their own rhythm. No alarms, no rush — just snow, mountains and the people you came with.',
+  day: [
+    ['08:00', 'Morning', 'You wake up to silence. The spruces turned white overnight, and the coffee is ready while you watch the forest.'],
+    ['10:00', 'On the slopes', 'Malina Ski Center is close by. Pamporovo is famous for its sunny winter days — powder under a blue sky.'],
+    ['15:00', 'Afternoon', 'A walk along snowy trails where deer come almost to the terrace. The kids can hardly believe it.'],
+    ['20:00', 'Evening', 'A big sofa, books, board games and a glass of Rhodope wine. Here, evenings become the best part of the day.'],
+  ],
+  aptEyebrow: 'The apartments', aptH: 'Three homes in the forest. Pick yours.',
+  winterEyebrow: 'Ski holidays in Pamporovo', winterH: 'Snow, sunshine and slopes for everyone',
+  winterText: 'Pamporovo is one of the sunniest ski resorts in Bulgaria and a great choice for beginners and families. From the kids\' first turns to the black "Wall" run, there is a slope for everyone — plus forest walks, sledging and Rhodope cuisine when your legs say enough.',
+  stats: [['1,926 m', 'Snezhanka peak'], ['~30 km', 'of ski runs'], ['13', 'lifts'], ['Dec – Apr', 'ski season']],
+  guide: 'Full guide to skiing in Pamporovo →',
+  whyEyebrow: 'We thought of everything', whyH: 'Just bring your skis and a good mood',
+  why: [
+    ['Close to the slopes', 'The complex is close to Malina Ski Center — more time on snow, less in the car.'],
+    ['Dry and warm', 'Washer and dryer in the apartments — put on dry, warm gear every morning.'],
+    ['Forest on your doorstep', 'Forest-view terraces, birds and deer — nature is part of your stay.'],
+    ['Personal touch', 'You talk directly with the owners — no middlemen, no hidden fees.'],
+  ],
+  faqH: 'Frequently asked questions',
+  faq: [
+    ['How close are the apartments to the slopes?', 'Elit Pamporovo is located close to Malina Ski Center in Pamporovo. Give us a call and we will tell you the easiest way to the lift.'],
+    ['How many guests can stay?', 'Forest Dream and Rhodope Paradise have one bedroom and sleep up to 4. Deer\'s Home has two bedrooms and sleeps up to 5.'],
+    ['What is included?', 'Every apartment has a fully equipped kitchen with dishwasher and coffee machine, a forest-view terrace, TV and free Wi‑Fi. All of them also have a washer and dryer.'],
+    ['Are the apartments good for a summer holiday too?', 'Yes. Summer in the Rhodopes is cool and green — perfect for forest walks, mountain biking and escaping the heat.'],
+    ['How do I book?', `Call ${SITE.phoneDisplay}, message us on Viber or WhatsApp, or send an enquiry through the form on this site.`],
+  ],
+};
+
+const dayImgs = [coffee, piste, deer, evening];
+const dayAlts = bg
+  ? ['Сутрешно кафе с изглед към гората в Пампорово', 'Утъпкана ски писта в Пампорово', 'Сърничка в гората край апартаментите', 'Уютна дневна вечер']
+  : ['Morning coffee with a forest view in Pamporovo', 'Groomed ski run in Pamporovo', 'A deer in the forest by the apartments', 'Cozy living room in the evening'];
+const icons = [
+  '<path d="M4 30 L14 12 L20 22 L24 16 L32 30 Z"/><path d="M11 17 L14 12 L17 17"/>',
+  '<path d="M18 4v28M6 11l24 14M6 25l24-14"/><path d="M14 6l4 3 4-3M14 30l4-3 4 3"/>',
+  '<path d="M18 32V20M18 4l9 14H9z"/><path d="M18 10l6 10H12z"/>',
+  '<circle cx="18" cy="12" r="6"/><path d="M6 32c1-7 6-11 12-11s11 4 12 11"/>',
+];
+
+const hero = await getImage({ src: heroImg, width: 1280, format: 'jpg' });
+const alt = { bg: '/bg/', en: '/en/' };
+const ogLogo = new URL('/favicon.svg', SITE.url).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LodgingBusiness',
+    '@id': SITE.url + '/#business',
+    name: bg ? SITE.name : SITE.nameEn,
+    alternateName: bg ? SITE.nameEn : SITE.name,
+    description: C.desc,
+    url: new URL(alt[lang], SITE.url).href,
+    telephone: SITE.phone,
+    image: new URL(hero.src, SITE.url).href,
+    logo: ogLogo,
+    address: { '@type': 'PostalAddress', addressLocality: SITE.locality[lang], addressRegion: SITE.region[lang], addressCountry: 'BG' },
+    ...(SITE.geo ? { geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lng } } : {}),
+    amenityFeature: ['Wi‑Fi', bg ? 'Кухня' : 'Kitchen', bg ? 'Тераса' : 'Terrace', bg ? 'Пералня' : 'Washing machine']
+      .map((n) => ({ '@type': 'LocationFeatureSpecification', name: n, value: true })),
+    containsPlace: apartments.map((a) => ({
+      '@type': 'Apartment',
+      name: a.name[lang],
+      url: new URL(`/${lang}/${a.slug[lang]}/`, SITE.url).href,
+      numberOfRooms: a.bedrooms + 1,
+      numberOfBedrooms: a.bedrooms,
+      floorSize: { '@type': 'QuantitativeValue', value: a.size, unitCode: 'MTK' },
+      occupancy: { '@type': 'QuantitativeValue', maxValue: a.guests },
+    })),
+    knowsLanguage: ['bg', 'en'],
+    inLanguage: lang,
+  },
+  { '@context': 'https://schema.org', '@type': 'WebSite', '@id': SITE.url + '/#website', url: SITE.url, name: bg ? SITE.name : SITE.nameEn, inLanguage: lang },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: C.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  },
+];
+---
+<Base lang={lang} title={C.title} description={C.desc} alternates={alt} jsonLd={jsonLd} transparentNav>
+  <Fragment slot="footer-apartments">
+    <ul class="footer__list">{apartments.map((a) => <li><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></li>)}</ul>
+  </Fragment>
+
+  <section class="hero">
+    <Photo src={heroImg} alt={bg ? 'Ски лифт и заснежени смърчове в Пампорово' : 'Ski lift and snowy spruces in Pamporovo'} widths={[640, 1024, 1600]} sizes="100vw" eager quality={50} class="hero__img" />
+    <canvas id="snow" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <span class="eyebrow" style="color:var(--gold)">{C.eyebrow}</span>
+      <h1>{C.h1[0]}<em>{C.h1[1]}</em></h1>
+      <p class="lead">{C.lead}</p>
+      <div class="actions">
+        <a href="#book" class="btn btn--light">{C.cta1}</a>
+        <a href="#apartments" class="btn btn--light btn--ghost">{C.cta2}</a>
+      </div>
+      <ul class="facts">{C.facts.map(([n, l]) => <li><strong>{n}</strong>{l}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="center">
+    <div class="wrap">
+      <div class="rule"></div>
+      <span class="eyebrow">{C.promiseEyebrow}</span>
+      <p class="quote h2" style="font-family:var(--serif);font-size:clamp(26px,3.6vw,42px);line-height:1.25">{C.promise}</p>
+      <p class="lead">{C.promiseText}</p>
+    </div>
+  </section>
+
+  <section class="parch" id="day">
+    <div class="wrap">
+      <div class="split">
+        <div><span class="eyebrow">{C.dayEyebrow}</span><h2>{C.dayH}</h2></div>
+        <p class="lead">{C.dayLead}</p>
+      </div>
+      <ol class="timeline">
+        {C.day.map(([time, h, p], i) => (
+          <li class="moment">
+            <Photo src={dayImgs[i]} alt={dayAlts[i]} widths={[400, 600]} sizes="(max-width: 520px) 100vw, (max-width: 960px) 50vw, 280px" />
+            <time>{time}</time><h3>{h}</h3><p>{p}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="apartments">
+    <div class="wrap">
+      <span class="eyebrow">{C.aptEyebrow}</span>
+      <h2>{C.aptH}</h2>
+      <div class="cards">{apartments.map((a) => <ApartmentCard apt={a} lang={lang} />)}</div>
+    </div>
+  </section>
+
+  <section class="dark" id="winter">
+    <div class="wrap winter">
+      <div>
+        <span class="eyebrow">{C.winterEyebrow}</span>
+        <h2>{C.winterH}</h2>
+        <p class="lead">{C.winterText}</p>
+        <ul class="stats">{C.stats.map(([n, l]) => <li><strong>{n}</strong><span>{l}</span></li>)}</ul>
+        <p style="margin-top:28px"><a href={s.blog} style="color:var(--gold)">{C.guide}</a></p>
+      </div>
+      <Photo src={snezhanka} alt={bg ? 'Връх Снежанка и заснежени писти в Пампорово' : 'Snezhanka peak and snowy slopes in Pamporovo'} widths={[500, 800, 1100]} sizes="(max-width: 860px) 100vw, 560px" />
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">{C.whyEyebrow}</span>
+      <h2 style="max-width:680px">{C.whyH}</h2>
+      <ul class="why">
+        {C.why.map(([h, p], i) => (
+          <li><svg viewBox="0 0 36 36" aria-hidden="true" set:html={icons[i]} /><h3>{h}</h3><p>{p}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <div class="mosaic" role="group" aria-label={s.gallery}>
+    <Photo src={snowyForest} alt={bg ? 'Заснежена гора, гледка от терасата' : 'Snowy forest seen from the terrace'} widths={[600, 1000]} sizes="(max-width: 760px) 100vw, 60vw" />
+    <Photo src={bird} alt={bg ? 'Червенушка на терасата' : 'Bullfinch on the terrace'} widths={[400, 600]} sizes="(max-width: 760px) 50vw, 25vw" />
+    <Photo src={terrace} alt={bg ? 'Заснежена тераса с изглед към гората' : 'Snowy terrace with forest view'} widths={[400, 600]} sizes="(max-width: 760px) 50vw, 25vw" />
+    <Photo src={living} alt={bg ? 'Светла дневна в апартамент в Пампорово' : 'Bright living room in a Pamporovo apartment'} widths={[400, 600]} sizes="(max-width: 760px) 50vw, 25vw" />
+    <Photo src={forest} alt={bg ? 'Родопска смърчова гора' : 'Rhodope spruce forest'} widths={[400, 600]} sizes="(max-width: 760px) 50vw, 25vw" />
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2 class="center">{C.faqH}</h2>
+      <div class="faq">
+        {C.faq.map(([q, a], i) => <details open={i === 0}><summary>{q}</summary><p>{a}</p></details>)}
+      </div>
+    </div>
+  </section>
+
+  <BookingForm lang={lang} />
+
+  <script is:inline>
+    (function(){
+      if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var start=function(){
+        var c=document.getElementById('snow'); if(!c) return; var x=c.getContext('2d'),w,h,fl,vis=true;
+        var size=function(){w=c.width=c.offsetWidth;h=c.height=c.offsetHeight;fl=[];for(var i=0;i<Math.round(w/10);i++)fl.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+.6,s:Math.random()*.6+.3,d:Math.random()*6});};
+        size(); addEventListener('resize',size);
+        new IntersectionObserver(function(e){vis=e[0].isIntersecting}).observe(c);
+        (function tick(){ if(vis){ x.clearRect(0,0,w,h); x.fillStyle='rgba(255,255,255,.85)';
+          for(var i=0;i<fl.length;i++){var f=fl[i]; f.y+=f.s; f.d+=.01; f.x+=Math.sin(f.d)*.35; if(f.y>h){f.y=-4;f.x=Math.random()*w;} x.beginPath(); x.arc(f.x,f.y,f.r,0,7); x.fill();} }
+          requestAnimationFrame(tick); })();
+      };
+      'requestIdleCallback' in window ? requestIdleCallback(start,{timeout:2000}) : setTimeout(start,1200);
+    })();
+  </script>
+</Base>

@@ -1,0 +1,28 @@
+---
+// Показва се само ако апартаментът има поне един отзив в src/data/apartments.ts
+import { t, type Lang } from '../data/site';
+import type { Review } from '../data/apartments';
+
+interface Props { reviews: Review[]; lang: Lang }
+const { reviews, lang } = Astro.props;
+const fmt = (d: string) =>
+  new Date(d + '-01').toLocaleDateString(lang === 'bg' ? 'bg-BG' : 'en-GB', { month: 'long', year: 'numeric' });
+---
+{reviews.length > 0 && (
+  <section class="parch" id="reviews">
+    <div class="wrap">
+      <span class="eyebrow">{t[lang].reviews}</span>
+      <h2>{lang === 'bg' ? 'Гостите ни разказват' : 'In our guests’ words'}</h2>
+      <ul class="reviews">
+        {reviews.map((r) => (
+          <li class="review" lang={r.lang}>
+            <blockquote>„{r.text}"</blockquote>
+            <footer>
+              <span class="score">{r.rating}/{r.outOf}</span> · {r.author} · {r.url ? <a href={r.url} rel="nofollow noopener" target="_blank">{r.source}</a> : r.source} · {fmt(r.date)}
+            </footer>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

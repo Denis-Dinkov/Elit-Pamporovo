@@ -1,0 +1,132 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../Photo.astro';
+import ApartmentCard from '../ApartmentCard.astro';
+import BookingForm from '../BookingForm.astro';
+import Reviews from '../Reviews.astro';
+import { SITE, t, type Lang } from '../../data/site';
+import { apartments, type Apartment } from '../../data/apartments';
+import { getImage } from 'astro:assets';
+
+interface Props { lang: Lang; apt: Apartment }
+const { lang, apt } = Astro.props;
+const bg = lang === 'bg';
+const s = t[lang];
+const name = apt.name[lang];
+const m2 = bg ? 'м²' : 'm²';
+
+const title = bg
+  ? `${name} — апартамент за ${apt.guests} в Пампорово до ски център Малина`
+  : `${name} — ${apt.bedrooms}-Bedroom Apartment in Pamporovo near Malina Ski Center`;
+const desc = bg
+  ? `${name}: ${s.bedrooms(apt.bedrooms)}, ${s.guests(apt.guests)}, ${apt.size} м², тераса с изглед към гората, оборудвана кухня. Близо до ски център Малина, Пампорово. Резервации: ${SITE.phoneDisplay}.`
+  : `${name}: ${s.bedrooms(apt.bedrooms)}, ${s.guests(apt.guests)}, ${apt.size} m², forest-view terrace, full kitchen. Close to Malina Ski Center, Pamporovo. Book: ${SITE.phoneDisplay}.`;
+
+const alternates = { bg: `/bg/${apt.slug.bg}/`, en: `/en/${apt.slug.en}/` };
+const url = new URL(alternates[lang], SITE.url).href;
+const [first, second, ...rest] = apt.photos;
+const others = apartments.filter((a) => a.id !== apt.id);
+const imgUrls = await Promise.all(
+  [apt.cover, ...apt.photos.slice(0, 5)].map(async (p) => new URL((await getImage({ src: p.src, width: 1200, format: 'jpg' })).src, SITE.url).href),
+);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Apartment',
+    '@id': url + '#apartment',
+    name,
+    description: apt.intro[lang],
+    url,
+    image: imgUrls,
+    numberOfRooms: apt.bedrooms + 1,
+    numberOfBedrooms: apt.bedrooms,
+    floorLevel: String(apt.floor),
+    floorSize: { '@type': 'QuantitativeValue', value: apt.size, unitCode: 'MTK' },
+    occupancy: { '@type': 'QuantitativeValue', maxValue: apt.guests },
+    amenityFeature: apt.amenities[lang].map((n) => ({ '@type': 'LocationFeatureSpecification', name: n, value: true })),
+    containedInPlace: { '@id': SITE.url + '/#business' },
+    address: { '@type': 'PostalAddress', addressLocality: SITE.locality[lang], addressRegion: SITE.region[lang], addressCountry: 'BG' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: s.breadcrumbsHome, item: new URL(s.home, SITE.url).href },
+      { '@type': 'ListItem', position: 2, name: s.nav.apartments, item: new URL(s.apartments, SITE.url).href },
+      { '@type': 'ListItem', position: 3, name, item: url },
+    ],
+  },
+];
+---
+<Base lang={lang} title={title} description={desc} alternates={alternates} ogImage={apt.cover.src} jsonLd={jsonLd}>
+  <Fragment slot="footer-apartments">
+    <ul class="footer__list">{apartments.map((a) => <li><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></li>)}</ul>
+  </Fragment>
+
+  <div class="wrap">
+    <ol class="crumbs" aria-label={bg ? 'Навигация' : 'Breadcrumb'}>
+      <li><a href={s.home}>{s.breadcrumbsHome}</a></li>
+      <li><a href={s.apartments}>{s.nav.apartments}</a></li>
+      <li aria-current="page">{name}</li>
+    </ol>
+    <div class="apt-head">
+      <span class="eyebrow">{bg ? `Апартамент в Пампорово · ${s.floor(apt.floor)}` : `Apartment in Pamporovo · ${s.floor(apt.floor)}`}</span>
+      <h1>{bg && !name.startsWith('Апартамент') ? `Апартамент ${name}` : name}</h1>
+      <p class="sub">{apt.tagline[lang]}</p>
+      <ul class="specs">
+        <li>{s.guests(apt.guests)}</li><li>{s.bedrooms(apt.bedrooms)}</li><li>{apt.size} {m2}</li><li>{s.view}</li>
+      </ul>
+    </div>
+    <div class:list={['apt-hero', { 'apt-hero--solo': !first }]}>
+      <Photo src={apt.cover.src} alt={apt.cover.alt[lang]} widths={[640, 960, 1400]} sizes="(max-width: 860px) 100vw, 66vw" eager />
+      {first && (
+        <div class="stack">
+          <Photo src={first.src} alt={first.alt[lang]} widths={[400, 700]} sizes="(max-width: 860px) 50vw, 33vw" />
+          {second && <Photo src={second.src} alt={second.alt[lang]} widths={[400, 700]} sizes="(max-width: 860px) 50vw, 33vw" />}
+        </div>
+      )}
+    </div>
+
+    <div class="apt-body">
+      <div>
+        <h2 style="font-size:clamp(26px,3vw,34px);margin-bottom:20px">{bg ? 'Защо ще го обикнете' : 'Why you will love it'}</h2>
+        {apt.story[lang].map((p) => <p>{p}</p>)}
+        <h2 style="font-size:clamp(24px,2.6vw,30px);margin:36px 0 4px">{s.amenities}</h2>
+        <ul class="amen">{apt.amenities[lang].map((a) => <li>{a}</li>)}</ul>
+        {rest.length > 0 && (
+          <>
+            <h2 style="font-size:clamp(24px,2.6vw,30px);margin:40px 0 0">{s.gallery}</h2>
+            <div class="grid-photos">
+              {rest.map((p) => <Photo src={p.src} alt={p.alt[lang]} widths={[400, 700]} sizes="(max-width: 860px) 50vw, 300px" />)}
+            </div>
+          </>
+        )}
+      </div>
+      <aside class="aside">
+        <span class="eyebrow">{name}</span>
+        <dl>
+          <dt>{bg ? 'Гости' : 'Guests'}</dt><dd>{s.guests(apt.guests)}</dd>
+          <dt>{bg ? 'Спални' : 'Bedrooms'}</dt><dd>{apt.bedrooms}</dd>
+          <dt>{bg ? 'Площ' : 'Size'}</dt><dd>{apt.size} {m2}</dd>
+          <dt>{bg ? 'Етаж' : 'Floor'}</dt><dd>{apt.floor} ({bg ? 'ап.' : 'apt.'} {apt.number})</dd>
+          <dt>{bg ? 'Пистите' : 'Slopes'}</dt><dd>{bg ? 'близо до ски център Малина' : 'close to Malina Ski Center'}</dd>
+        </dl>
+        <a class="btn" href="#book">{bg ? 'Провери свободни дати' : 'Check availability'}</a>
+        <a class="btn" href={`tel:${SITE.phone}`} aria-label={`${s.call}: ${SITE.phoneDisplay}`}>☎ {SITE.phoneDisplay}</a>
+      </aside>
+    </div>
+  </div>
+
+  <Reviews reviews={apt.reviews} lang={lang} />
+  <BookingForm lang={lang} selected={apt.id} />
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">{s.others}</span>
+      <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        {others.map((a) => <ApartmentCard apt={a} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+</Base>

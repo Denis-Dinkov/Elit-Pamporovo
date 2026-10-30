@@ -1,0 +1,10 @@
+---
+import ApartmentDetail from '../../components/pages/ApartmentDetail.astro';
+import { apartments } from '../../data/apartments';
+
+export function getStaticPaths() {
+  return apartments.map((apt) => ({ params: { slug: apt.slug.en }, props: { apt } }));
+}
+const { apt } = Astro.props;
+---
+<ApartmentDetail lang="en" apt={apt} />
