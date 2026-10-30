@@ -15,8 +15,8 @@ const phoneDigits = SITE.phone.slice(1);
       <h2>{bg ? 'Най-хубавите седмици се заемат първи' : 'The best weeks go first'}</h2>
       <p class="lead" style="margin-top:18px">
         {bg
-          ? 'Кажете ни кога и с кого идвате — отговаряме лично. Резервации и на телефон.'
-          : 'Tell us when and who is coming — we answer personally. You can also book by phone.'}
+          ? 'Кажете ни кога и с кого идвате и ще ви отговорим лично. Резервации и на телефон.'
+          : 'Tell us when and who is coming, and we will answer personally. You can also book by phone.'}
       </p>
       <ul class="contact">
         <li>{bg ? 'Телефон' : 'Phone'}: <a href={`tel:${SITE.phone}`}><strong>{SITE.phoneDisplay}</strong></a></li>
@@ -52,7 +52,7 @@ const phoneDigits = SITE.phone.slice(1);
         (bg?'Пристигане: ':'Check-in: ')+d.from+'\n'+(bg?'Заминаване: ':'Check-out: ')+d.to+'\n'+
         (bg?'Гости: ':'Guests: ')+d.guests+'\n'+(bg?'Име: ':'Name: ')+d.name+(d.msg?'\n\n'+d.msg:'');
       var url=f.dataset.email
-        ? 'mailto:'+f.dataset.email+'?subject='+encodeURIComponent((bg?'Запитване — ':'Enquiry — ')+d.apt)+'&body='+encodeURIComponent(txt)
+        ? 'mailto:'+f.dataset.email+'?subject='+encodeURIComponent((bg?'Запитване: ':'Enquiry: ')+d.apt)+'&body='+encodeURIComponent(txt)
         : 'https://wa.me/'+f.dataset.phone+'?text='+encodeURIComponent(txt);
       window.open(url,'_blank','noopener');
       f.querySelector('.form__ok').hidden=false;

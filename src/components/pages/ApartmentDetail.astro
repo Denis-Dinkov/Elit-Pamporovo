@@ -16,8 +16,8 @@ const name = apt.name[lang];
 const m2 = bg ? 'м²' : 'm²';
 
 const title = bg
-  ? `${name} — апартамент за ${apt.guests} в Пампорово до ски център Малина`
-  : `${name} — ${apt.bedrooms}-Bedroom Apartment in Pamporovo near Malina Ski Center`;
+  ? `${name}: апартамент за ${apt.guests} в Пампорово до ски център Малина`
+  : `${name}: ${apt.bedrooms}-Bedroom Apartment in Pamporovo near Malina Ski Center`;
 const desc = bg
   ? `${name}: ${s.bedrooms(apt.bedrooms)}, ${s.guests(apt.guests)}, ${apt.size} м², тераса с изглед към гората, оборудвана кухня. Близо до ски център Малина, Пампорово. Резервации: ${SITE.phoneDisplay}.`
   : `${name}: ${s.bedrooms(apt.bedrooms)}, ${s.guests(apt.guests)}, ${apt.size} m², forest-view terrace, full kitchen. Close to Malina Ski Center, Pamporovo. Book: ${SITE.phoneDisplay}.`;
