@@ -1,0 +1,17 @@
+---
+// Снимки, които се отварят на цял екран: всяка е линк към голяма версия (работи и без JS),
+// а Lightbox.astro ги прихваща и показва в <dialog> с прелистване
+import { getImage } from 'astro:assets';
+import Photo from './Photo.astro';
+import type { Photo as P } from '../data/apartments';
+import type { Lang } from '../data/site';
+
+interface Props { photos: P[]; lang: Lang; class?: string; sizes?: string; widths?: number[]; eagerFirst?: boolean }
+const { photos, lang, class: cls, sizes = '(max-width: 860px) 50vw, 300px', widths = [400, 700], eagerFirst = false } = Astro.props;
+const full = await Promise.all(photos.map(async (p) => (await getImage({ src: p.src, width: Math.min(1800, p.src.width), format: 'webp', quality: 78 })).src));
+---
+{photos.map((p, i) => (
+  <a href={full[i]} class:list={['lb', cls]} data-lb data-alt={p.alt[lang]}>
+    <Photo src={p.src} alt={p.alt[lang]} widths={widths} sizes={sizes} eager={eagerFirst && i === 0} />
+  </a>
+))}

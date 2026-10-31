@@ -24,8 +24,8 @@ const og = await getImage({ src: ogImage, width: 1200, height: 630, fit: 'cover'
 const ogUrl = new URL(og.src, SITE.url).href;
 const otherLang: Lang = lang === 'bg' ? 'en' : 'bg';
 const navLinks = [
-  { href: s.home + '#day', label: s.nav.day },
   { href: s.apartments, label: s.nav.apartments },
+  { href: s.home + '#location', label: s.nav.location },
   { href: s.blog, label: s.nav.ski },
 ];
 ---
@@ -82,6 +82,7 @@ const navLinks = [
           <div class="menu__panel">
             <a href={s.home}>{s.breadcrumbsHome}</a>
             {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+            <a href={s.home + '#reviews'}>{s.nav.reviews}</a>
             <a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a>
             <a href={alternates[otherLang]} hreflang={otherLang} lang={otherLang}>{s.other}</a>
           </div>
@@ -119,6 +120,7 @@ const navLinks = [
   </a>
 
   <script is:inline>
+    (function(){var c=document.querySelector('.callfab');if(!c)return;var f=function(){c.classList.toggle('callfab--on',scrollY>innerHeight*.7)};addEventListener('scroll',f,{passive:true});f();})();
     (function(){var m=document.querySelector('.menu');if(!m)return;m.addEventListener('click',function(e){if(e.target.closest('a'))m.open=false});document.addEventListener('click',function(e){if(m.open&&!m.contains(e.target))m.open=false});})();
     (function(){var n=document.getElementById('nav');if(!n.classList.contains('nav--clear'))return;var f=function(){n.classList.toggle('nav--solid',scrollY>60)};addEventListener('scroll',f,{passive:true});f();})();
   </script>

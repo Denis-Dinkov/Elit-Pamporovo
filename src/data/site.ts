@@ -9,15 +9,24 @@ export const SITE = {
   email: '',
   locality: { bg: 'Пампорово', en: 'Pamporovo' },
   region: { bg: 'област Смолян', en: 'Smolyan Province' },
-  // TODO: попълнете точните координати на комплекса (от Google Maps → десен бутон → координати)
-  geo: null as null | { lat: number; lng: number },
+  postalCode: '4870',
+  street: { bg: 'Комплекс „Елит Пампорово“', en: 'Elit Pamporovo Holiday Village' },
+  // Координати на комплекса (от обявите в Booking.com)
+  geo: { lat: 41.65353, lng: 24.68843 } as null | { lat: number; lng: number },
+  // Разстояния (по данни от Booking.com / OpenStreetMap)
+  distances: [
+    { bg: 'Ски център Малина', en: 'Malina Ski Center', value: { bg: '~800 м', en: '~800 m' } },
+    { bg: 'Лифт Студенец 3', en: 'Studenets 3 ski lift', value: { bg: '~700 м', en: '~700 m' } },
+    { bg: 'Смолян', en: 'Smolyan', value: { bg: '~15 км', en: '~15 km' } },
+    { bg: 'Летище Пловдив', en: 'Plovdiv Airport', value: { bg: '~70 км', en: '~70 km' } },
+  ],
 };
 
 export type Lang = 'bg' | 'en';
 
 export const t = {
   bg: {
-    nav: { day: 'Един ден тук', apartments: 'Апартаменти', winter: 'Зимата', ski: 'Ски в Пампорово', book: 'Запитване' },
+    nav: { day: 'Един ден тук', apartments: 'Апартаменти', location: 'Местоположение', reviews: 'Отзиви', winter: 'Зимата', ski: 'Ски в Пампорово', book: 'Запитване' },
     home: '/bg/',
     apartments: '/bg/apartamenti/',
     blog: '/bg/blog/ski-v-pamporovo/',
@@ -37,7 +46,7 @@ export const t = {
     footer: 'Апартаменти под наем в Пампорово, близо до ски център Малина.',
   },
   en: {
-    nav: { day: 'A day here', apartments: 'Apartments', winter: 'Winter', ski: 'Skiing in Pamporovo', book: 'Enquire' },
+    nav: { day: 'A day here', apartments: 'Apartments', location: 'Location', reviews: 'Reviews', winter: 'Winter', ski: 'Skiing in Pamporovo', book: 'Enquire' },
     home: '/en/',
     apartments: '/en/apartments/',
     blog: '/en/blog/skining-pamporovo/',

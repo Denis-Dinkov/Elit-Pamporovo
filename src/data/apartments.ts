@@ -68,6 +68,10 @@ export type Apartment = {
   floor: number;
   number: number;
   amenities: { bg: string[]; en: string[] };
+  /** Обява в Booking.com — оценката се показва като значка (стойностите са от Booking, обновявайте ги ръчно) */
+  booking?: { url: string; score: number; reviews: number; highlight: { bg: string; en: string } };
+  checkIn?: string;
+  checkOut?: string;
   cover: Photo;
   photos: Photo[];
   reviews: Review[];
@@ -104,9 +108,17 @@ export const apartments: Apartment[] = [
     size: 60,
     floor: 5,
     number: 82,
+    booking: {
+      url: 'https://www.booking.com/hotel/bg/forest-dream-apartment-elit-pamporovo.html',
+      score: 9.3,
+      reviews: 21,
+      highlight: { bg: 'Wi‑Fi 10 · Удобства 9.5 · Комфорт 9.3', en: 'Wi‑Fi 10 · Facilities 9.5 · Comfort 9.3' },
+    },
+    checkIn: '14:00 – 00:00',
+    checkOut: '08:00 – 11:00',
     amenities: {
-      bg: ['Голямо двойно легло', 'Голям удобен диван', ...baseAmenities.bg, washer.bg, 'Книги и настолни игри'],
-      en: ['Large double bed', 'Large comfortable sofa', ...baseAmenities.en, washer.en, 'Books & board games'],
+      bg: ['Голямо двойно легло', 'Разтегателен диван', ...baseAmenities.bg, 'Фурна и тостер', washer.bg, 'Място за ски', 'Книги и настолни игри'],
+      en: ['Large double bed', 'Sofa bed', ...baseAmenities.en, 'Oven & toaster', washer.en, 'Ski storage', 'Books & board games'],
     },
     cover: { src: fdLiving, alt: { bg: 'Дневна на апартамент Forest Dream в Пампорово с изглед към гората', en: 'Forest Dream apartment living room in Pamporovo with forest view' } },
     photos: [
@@ -189,7 +201,18 @@ export const apartments: Apartment[] = [
     size: 68,
     floor: 4,
     number: 66,
-    amenities: { bg: [...baseAmenities.bg, washer.bg], en: [...baseAmenities.en, washer.en] },
+    booking: {
+      url: 'https://www.booking.com/hotel/bg/deer-39-s-home-at-elit-pamporovo.html',
+      score: 9.6,
+      reviews: 21,
+      highlight: { bg: 'Чистота 10 · Комфорт 10 · Удобства 10', en: 'Cleanliness 10 · Comfort 10 · Facilities 10' },
+    },
+    checkIn: '14:30 – 20:00',
+    checkOut: '08:00 – 11:30',
+    amenities: {
+      bg: ['Двойно легло и 2 единични', 'Разтегателен диван', ...baseAmenities.bg, washer.bg, 'Работно бюро', 'Бебешка кошара при заявка'],
+      en: ['Double bed and 2 singles', 'Sofa bed', ...baseAmenities.en, washer.en, 'Work desk', 'Cot on request'],
+    },
     cover: { src: dhLiving, alt: { bg: "Трапезария и дневна на апартамент Deer's Home в Пампорово", en: "Deer's Home apartment dining and living area in Pamporovo" } },
     photos: [
       { src: dhLiving2, alt: { bg: 'Дневна с диван и маса за хранене', en: 'Living room with sofa and dining table' } },

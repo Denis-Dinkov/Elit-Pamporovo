@@ -1,0 +1,33 @@
+---
+// Местоположение: адрес, разстояния и карта (OpenStreetMap — без ключ и без бисквитки, зарежда се при превъртане)
+import { SITE, type Lang } from '../data/site';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const bg = lang === 'bg';
+const g = SITE.geo!;
+const d = 0.012;
+const osm = `https://www.openstreetmap.org/export/embed.html?bbox=${g.lng - d * 1.6}%2C${g.lat - d}%2C${g.lng + d * 1.6}%2C${g.lat + d}&layer=mapnik&marker=${g.lat}%2C${g.lng}`;
+const gmaps = `https://www.google.com/maps/search/?api=1&query=${g.lat}%2C${g.lng}`;
+---
+<section id="location">
+  <div class="wrap loc">
+    <div>
+      <span class="eyebrow">{bg ? 'Местоположение' : 'Location'}</span>
+      <h2>{bg ? 'В гората, на крачка от пистите' : 'In the forest, steps from the slopes'}</h2>
+      <p class="lead" style="margin-top:16px">
+        {bg
+          ? 'Комплекс „Елит Пампорово“ е сгушен в смърчовата гора край ски център Малина. Тихо е, а пистите са съвсем близо.'
+          : 'The Elit Pamporovo complex sits in the spruce forest next to Malina Ski Center. It is quiet, and the slopes are close by.'}
+      </p>
+      <address class="loc__addr">{SITE.street[lang]}, {SITE.postalCode} {SITE.locality[lang]}, {SITE.region[lang]}</address>
+      <ul class="loc__list">
+        {SITE.distances.map((x) => <li><span>{x[lang]}</span><strong>{x.value[lang]}</strong></li>)}
+      </ul>
+      <a class="btn" href={gmaps} target="_blank" rel="noopener">{bg ? 'Отвори в Google Maps' : 'Open in Google Maps'}</a>
+    </div>
+    <div class="loc__map">
+      <iframe src={osm} title={bg ? 'Карта: Елит Пампорово' : 'Map: Elit Pamporovo'} loading="lazy" referrerpolicy="no-referrer"></iframe>
+    </div>
+  </div>
+</section>

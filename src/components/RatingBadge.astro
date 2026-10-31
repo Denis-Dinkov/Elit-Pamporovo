@@ -1,0 +1,17 @@
+---
+// Значка с оценката от Booking.com — показва се само ако апартаментът има обява там
+import type { Apartment } from '../data/apartments';
+import type { Lang } from '../data/site';
+
+interface Props { apt: Apartment; lang: Lang; link?: boolean; size?: 'sm' | 'lg' }
+const { apt, lang, link = false, size = 'sm' } = Astro.props;
+const b = apt.booking;
+const word = (n: number) => (lang === 'bg' ? (n >= 9.5 ? 'Изключителен' : n >= 9 ? 'Отличен' : 'Много добър') : n >= 9.5 ? 'Exceptional' : n >= 9 ? 'Superb' : 'Very good');
+const Tag = link ? 'a' : 'span';
+---
+{b && (
+  <Tag class:list={['rating', `rating--${size}`]} {...(link ? { href: b.url, target: '_blank', rel: 'noopener nofollow' } : {})}>
+    <span class="rating__score">{b.score.toFixed(1)}</span>
+    <span class="rating__txt"><strong>{word(b.score)}</strong>{` · ${b.reviews} ${lang === 'bg' ? 'отзива в Booking' : 'Booking reviews'}`}</span>
+  </Tag>
+)}

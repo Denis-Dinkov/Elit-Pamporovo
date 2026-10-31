@@ -1,5 +1,6 @@
 ---
 import Photo from './Photo.astro';
+import RatingBadge from './RatingBadge.astro';
 import { t, type Lang } from '../data/site';
 import type { Apartment } from '../data/apartments';
 
@@ -14,6 +15,7 @@ const href = `/${lang}/${apt.slug[lang]}/`;
     <Photo src={apt.cover.src} alt={apt.cover.alt[lang]} sizes="(max-width: 760px) 100vw, 600px" />
     <span class="tag">{s.guests(apt.guests)}</span>
   </div>
+  <RatingBadge apt={apt} lang={lang} />
   <H>{apt.name[lang]}</H>
   <p class="sub">{apt.tagline[lang]}</p>
   <p>{apt.intro[lang]}</p>

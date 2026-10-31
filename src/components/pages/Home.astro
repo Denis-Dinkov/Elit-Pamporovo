@@ -3,6 +3,9 @@ import Base from '../../layouts/Base.astro';
 import Photo from '../Photo.astro';
 import ApartmentCard from '../ApartmentCard.astro';
 import BookingForm from '../BookingForm.astro';
+import HeroSearch from '../HeroSearch.astro';
+import Location from '../Location.astro';
+import RatingBadge from '../RatingBadge.astro';
 import { SITE, t, type Lang } from '../../data/site';
 import { apartments } from '../../data/apartments';
 import { getImage } from 'astro:assets';
@@ -30,11 +33,7 @@ const C = bg ? {
   eyebrow: 'Пампорово · Родопите · ски център Малина',
   h1: ['Апартаменти в Пампорово за зима, която ', 'ще помните'],
   lead: 'Три уютни апартамента сред смърчовата гора, близо до ски център Малина. Сутрин ви чакат пресен сняг и слънце. Вечер: топлина, настолни игри и тишина, каквато в града няма.',
-  cta1: 'Провери свободни дати', cta2: 'Разгледай апартаментите',
-  facts: [['3', 'апартамента'], ['до 5', 'гости'], ['60–68 м²', 'простор']],
-  promiseEyebrow: 'Защо хората се връщат',
-  promise: '„Не наемате просто апартамент. Наемате седмица, за която ще разказвате до следващата зима."',
-  promiseText: 'Подредихме всеки апартамент така, както бихме искали да посрещнат нас: светло, топло, с всичко нужно за ски ваканция и с тераса, от която гледате гората.',
+  facts: [['9.6', 'оценка в Booking'], ['~800 м', 'до ски център Малина'], ['до 5', 'гости']],
   dayEyebrow: 'Един ден в Пампорово', dayH: 'От първото кафе до последната партия карти',
   dayLead: 'Тук денят има свой ритъм. Никакви аларми, никакво бързане. Само сняг, планина и хората, с които сте дошли.',
   day: [
@@ -50,14 +49,17 @@ const C = bg ? {
   guide: 'Пълен наръчник за ски в Пампорово →',
   whyEyebrow: 'Помислили сме за всичко', whyH: 'Вие носите само ските и доброто настроение',
   why: [
-    ['До пистите', 'Комплексът е близо до ски център Малина. Повече време на снега, по-малко в колата.'],
-    ['Сухи и топли', 'Пералня и сушилня в апартаментите, за да обувате сухи и топли дрехи всяка сутрин.'],
+    ['До пистите', 'Около 800 м до ски център Малина и 700 м до лифт Студенец 3. Повече време на снега, по-малко в колата.'],
+    ['Безплатен паркинг и бърз Wi‑Fi', 'Паркирате безплатно в комплекса, а интернетът е оценен с 10 от гостите в Booking.'],
     ['Гората до вас', 'Тераса с изглед към гората, птички и сърнички. Природата е част от престоя.'],
-    ['Лично отношение', 'Говорите директно със собствениците, без посредници и без скрити такси.'],
+    ['Оценени от гостите', 'Deer\'s Home е с 9.6, а Forest Dream с 9.3 в Booking. Резервирате директно при домакините.'],
   ],
   faqH: 'Често задавани въпроси',
   faq: [
-    ['Колко близо са апартаментите до пистите?', 'Комплекс „Елит Пампорово" се намира близо до ски център Малина в Пампорово. Обадете се и ще ви разкажем как най-лесно да стигнете до лифта.'],
+    ['Колко близо са апартаментите до пистите?', 'Комплекс „Елит Пампорово“ е на около 800 м от ски център Малина и на около 700 м от лифт Студенец 3.'],
+    ['В колко часа е настаняването и напускането?', 'Настаняването е от 14:00 (Deer\'s Home от 14:30), а напускането до 11:00 (Deer\'s Home до 11:30). Кажете ни предварително кога пристигате.'],
+    ['Има ли паркинг?', 'Да, паркингът в комплекса е безплатен.'],
+    ['Допускат ли се домашни любимци?', 'За съжаление не. В апартаментите не се допускат домашни любимци и не се пуши.'],
     ['Колко души могат да отседнат?', 'Forest Dream и Родопски рай са с една спалня и побират до 4 гости. Deer\'s Home е с две спални и побира до 5 гости.'],
     ['Какво е включено в апартаментите?', 'Всички апартаменти имат напълно оборудвана кухня със съдомиялна и кафе машина, тераса с изглед към гората, телевизор и безплатен интернет. Всички имат и пералня със сушилня.'],
     ['Подходящи ли са апартаментите и за лятна почивка?', 'Да. Лятото в Родопите е прохладно и зелено, идеално за разходки в гората, планинско колоездене и почивка далеч от жегата.'],
@@ -69,11 +71,7 @@ const C = bg ? {
   eyebrow: 'Pamporovo · Rhodope Mountains · Malina Ski Center',
   h1: ['Pamporovo apartments for a winter ', 'you will remember'],
   lead: 'Three cozy apartments in the spruce forest, close to Malina Ski Center. Mornings of fresh snow and sunshine. Evenings of warmth, board games and a silence the city never has.',
-  cta1: 'Check availability', cta2: 'See the apartments',
-  facts: [['3', 'apartments'], ['up to 5', 'guests'], ['60–68 m²', 'of space']],
-  promiseEyebrow: 'Why guests come back',
-  promise: '"You are not just renting an apartment. You are renting a week you will talk about until next winter."',
-  promiseText: 'We set up each apartment the way we would want to be welcomed: bright, warm, with everything a ski holiday needs and a terrace overlooking the forest.',
+  facts: [['9.6', 'Booking rating'], ['~800 m', 'to Malina Ski Center'], ['up to 5', 'guests']],
   dayEyebrow: 'A day in Pamporovo', dayH: 'From the first coffee to the last card game',
   dayLead: 'Days here have their own rhythm. No alarms, no rush. Just snow, mountains and the people you came with.',
   day: [
@@ -89,14 +87,17 @@ const C = bg ? {
   guide: 'Full guide to skiing in Pamporovo →',
   whyEyebrow: 'We thought of everything', whyH: 'Just bring your skis and a good mood',
   why: [
-    ['Close to the slopes', 'The complex is close to Malina Ski Center. More time on snow, less in the car.'],
-    ['Dry and warm', 'Washer and dryer in the apartments, so you put on dry, warm gear every morning.'],
+    ['Close to the slopes', 'About 800 m to Malina Ski Center and 700 m to the Studenets 3 lift. More time on snow, less in the car.'],
+    ['Free parking and fast Wi‑Fi', 'Park for free at the complex, and the Wi‑Fi is rated 10 by guests on Booking.'],
     ['Forest on your doorstep', 'Forest-view terraces, birds and deer. Nature is part of your stay.'],
-    ['Personal touch', 'You talk directly with the owners, with no middlemen and no hidden fees.'],
+    ['Loved by guests', 'Deer\'s Home is rated 9.6 and Forest Dream 9.3 on Booking. Book directly with the hosts.'],
   ],
   faqH: 'Frequently asked questions',
   faq: [
-    ['How close are the apartments to the slopes?', 'Elit Pamporovo is located close to Malina Ski Center in Pamporovo. Give us a call and we will tell you the easiest way to the lift.'],
+    ['How close are the apartments to the slopes?', 'The Elit Pamporovo complex is about 800 m from Malina Ski Center and about 700 m from the Studenets 3 lift.'],
+    ['What are the check-in and check-out times?', 'Check-in is from 14:00 (Deer\'s Home from 14:30) and check-out is by 11:00 (Deer\'s Home by 11:30). Let us know your arrival time in advance.'],
+    ['Is there parking?', 'Yes, parking at the complex is free.'],
+    ['Are pets allowed?', 'Unfortunately not. Pets and smoking are not allowed in the apartments.'],
     ['How many guests can stay?', 'Forest Dream and Rhodope Paradise have one bedroom and sleep up to 4. Deer\'s Home has two bedrooms and sleeps up to 5.'],
     ['What is included?', 'Every apartment has a fully equipped kitchen with dishwasher and coffee machine, a forest-view terrace, TV and free Wi‑Fi. All of them also have a washer and dryer.'],
     ['Are the apartments good for a summer holiday too?', 'Yes. Summer in the Rhodopes is cool and green, perfect for forest walks, mountain biking and escaping the heat.'],
@@ -131,9 +132,13 @@ const jsonLd = [
     telephone: SITE.phone,
     image: new URL(hero.src, SITE.url).href,
     logo: ogLogo,
-    address: { '@type': 'PostalAddress', addressLocality: SITE.locality[lang], addressRegion: SITE.region[lang], addressCountry: 'BG' },
+    address: { '@type': 'PostalAddress', streetAddress: SITE.street[lang], postalCode: SITE.postalCode, addressLocality: SITE.locality[lang], addressRegion: SITE.region[lang], addressCountry: 'BG' },
+    checkinTime: '14:00',
+    checkoutTime: '11:00',
+    petsAllowed: false,
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${SITE.geo!.lat}%2C${SITE.geo!.lng}`,
     ...(SITE.geo ? { geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lng } } : {}),
-    amenityFeature: ['Wi‑Fi', bg ? 'Кухня' : 'Kitchen', bg ? 'Тераса' : 'Terrace', bg ? 'Пералня' : 'Washing machine']
+    amenityFeature: ['Wi‑Fi', bg ? 'Безплатен паркинг' : 'Free parking', bg ? 'Кухня' : 'Kitchen', bg ? 'Тераса' : 'Terrace', bg ? 'Пералня' : 'Washing machine', bg ? 'Детска площадка' : 'Playground']
       .map((n) => ({ '@type': 'LocationFeatureSpecification', name: n, value: true })),
     containsPlace: apartments.map((a) => ({
       '@type': 'Apartment',
@@ -167,20 +172,47 @@ const jsonLd = [
       <span class="eyebrow" style="color:var(--gold)">{C.eyebrow}</span>
       <h1>{C.h1[0]}<em>{C.h1[1]}</em></h1>
       <p class="lead">{C.lead}</p>
-      <div class="actions">
-        <a href="#book" class="btn btn--light">{C.cta1}</a>
-        <a href="#apartments" class="btn btn--light btn--ghost">{C.cta2}</a>
-      </div>
+      <HeroSearch lang={lang} />
       <ul class="facts">{C.facts.map(([n, l]) => <li><strong>{n}</strong>{l}</li>)}</ul>
     </div>
   </section>
 
-  <section class="center">
+  <section id="apartments">
     <div class="wrap">
-      <div class="rule"></div>
-      <span class="eyebrow">{C.promiseEyebrow}</span>
-      <p class="quote h2" style="font-family:var(--serif);font-size:clamp(26px,3.6vw,42px);line-height:1.25">{C.promise}</p>
-      <p class="lead">{C.promiseText}</p>
+      <span class="eyebrow">{C.aptEyebrow}</span>
+      <h2>{C.aptH}</h2>
+      <div class="cards">{apartments.map((a) => <ApartmentCard apt={a} lang={lang} />)}</div>
+    </div>
+  </section>
+
+  <section class="parch">
+    <div class="wrap">
+      <span class="eyebrow">{C.whyEyebrow}</span>
+      <h2 style="max-width:680px">{C.whyH}</h2>
+      <ul class="why">
+        {C.why.map(([h, p], i) => (
+          <li><svg viewBox="0 0 36 36" aria-hidden="true" set:html={icons[i]} /><h3>{h}</h3><p>{p}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <div class="wrap">
+      <span class="eyebrow">{s.nav.reviews}</span>
+      <h2 style="max-width:760px">{bg ? 'Гостите ни дават 9.3 до 9.6 от 10' : 'Guests rate us 9.3 to 9.6 out of 10'}</h2>
+      <p class="lead" style="margin-top:14px">{bg ? 'Оценките са от проверени престои в Booking.com. Натиснете, за да прочетете всички отзиви.' : 'Ratings come from verified stays on Booking.com. Tap to read every review.'}</p>
+      <ul class="scores">
+        {apartments.filter((a) => a.booking).map((a) => (
+          <li class="score">
+            <RatingBadge apt={a} lang={lang} link size="lg" />
+            <div>
+              <h3><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></h3>
+              <p>{a.booking!.highlight[lang]}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
@@ -201,14 +233,6 @@ const jsonLd = [
     </div>
   </section>
 
-  <section id="apartments">
-    <div class="wrap">
-      <span class="eyebrow">{C.aptEyebrow}</span>
-      <h2>{C.aptH}</h2>
-      <div class="cards">{apartments.map((a) => <ApartmentCard apt={a} lang={lang} />)}</div>
-    </div>
-  </section>
-
   <section class="dark" id="winter">
     <div class="wrap winter">
       <div>
@@ -222,17 +246,7 @@ const jsonLd = [
     </div>
   </section>
 
-  <section>
-    <div class="wrap">
-      <span class="eyebrow">{C.whyEyebrow}</span>
-      <h2 style="max-width:680px">{C.whyH}</h2>
-      <ul class="why">
-        {C.why.map(([h, p], i) => (
-          <li><svg viewBox="0 0 36 36" aria-hidden="true" set:html={icons[i]} /><h3>{h}</h3><p>{p}</p></li>
-        ))}
-      </ul>
-    </div>
-  </section>
+  <Location lang={lang} />
 
   <div class="mosaic" role="group" aria-label={s.gallery}>
     <Photo src={snowyForest} alt={bg ? 'Заснежена гора, гледка от терасата' : 'Snowy forest seen from the terrace'} widths={[600, 1000]} sizes="(max-width: 760px) 100vw, 60vw" />

@@ -25,8 +25,8 @@ const phoneDigits = SITE.phone.slice(1);
       </ul>
     </div>
     <form class="form" id="enquiry" data-phone={phoneDigits} data-email={SITE.email} data-lang={lang}>
-      <label>{bg ? 'Пристигане' : 'Check-in'}<input type="date" name="from" required></label>
-      <label>{bg ? 'Заминаване' : 'Check-out'}<input type="date" name="to" required></label>
+      <label class="date" data-ph={bg ? 'Изберете дата' : 'Select date'}>{bg ? 'Пристигане' : 'Check-in'}<input type="date" name="from" required></label>
+      <label class="date" data-ph={bg ? 'Изберете дата' : 'Select date'}>{bg ? 'Заминаване' : 'Check-out'}<input type="date" name="to" required></label>
       <label>{bg ? 'Апартамент' : 'Apartment'}
         <select name="apt">
           {apartments.map((a) => <option selected={a.id === selected}>{a.name[lang]}</option>)}

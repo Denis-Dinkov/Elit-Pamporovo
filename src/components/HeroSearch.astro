@@ -1,0 +1,32 @@
+---
+// Лента „дати + гости“ в началния екран — попълва формата за запитване и превърта до нея
+import type { Lang } from '../data/site';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const bg = lang === 'bg';
+---
+<form class="search" id="hero-search" action="#book">
+  <label class="date" data-ph={bg ? 'Изберете дата' : 'Select date'}>{bg ? 'Пристигане' : 'Check-in'}<input type="date" name="from" required></label>
+  <label class="date" data-ph={bg ? 'Изберете дата' : 'Select date'}>{bg ? 'Заминаване' : 'Check-out'}<input type="date" name="to" required></label>
+  <label>{bg ? 'Гости' : 'Guests'}
+    <select name="guests">{[1, 2, 3, 4, 5].map((n) => <option selected={n === 2}>{n}</option>)}</select>
+  </label>
+  <button class="btn btn--gold" type="submit">{bg ? 'Провери дати' : 'Check dates'}</button>
+</form>
+
+<script is:inline>
+  (function(){
+    var s=document.getElementById('hero-search'); if(!s) return;
+    var today=new Date().toISOString().slice(0,10);
+    s.from.min=today; s.to.min=today;
+    s.from.addEventListener('change',function(){ s.to.min=s.from.value||today; if(s.to.value&&s.to.value<=s.from.value) s.to.value=''; });
+    s.addEventListener('submit',function(e){
+      e.preventDefault();
+      var f=document.getElementById('enquiry');
+      if(f){ f.from.value=s.from.value; f.to.value=s.to.value; f.guests.value=s.guests.value; }
+      var b=document.getElementById('book'); if(b) b.scrollIntoView({behavior:'smooth'});
+      setTimeout(function(){ if(f&&f.name) f.name.focus({preventScroll:true}); },600);
+    });
+  })();
+</script>
