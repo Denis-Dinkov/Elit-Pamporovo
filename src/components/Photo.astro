@@ -1,6 +1,6 @@
 ---
-// Оптимизирана снимка: локалните минават през Astro (AVIF + WebP), снимките от Sanity —
-// през тяхното CDN (auto=format избира AVIF/WebP според браузъра). Lazy по подразбиране.
+// Optimized image: local files go through Astro (AVIF + WebP); Sanity images go through
+// their CDN (auto=format serves AVIF/WebP depending on the browser). Lazy by default.
 import { Picture } from 'astro:assets';
 import { isRemote, type AnyImage } from '../lib/apartments';
 

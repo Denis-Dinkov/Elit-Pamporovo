@@ -1,4 +1,4 @@
-// Апартаменти: идват от Sanity (админ панела), а ако Sanity не е настроен — от src/data/apartments.ts.
+// Apartments come from Sanity (the admin panel), or from src/data/apartments.ts when Sanity is not configured.
 import type { ImageMetadata } from 'astro';
 import { createClient } from '@sanity/client';
 import { localApartments } from '../data/apartments';
@@ -6,7 +6,7 @@ import { localApartments } from '../data/apartments';
 export type Lang = 'bg' | 'en';
 type L<T = string> = { bg: T; en: T };
 
-/** Снимка от Sanity CDN */
+/** Image served from the Sanity CDN */
 export type RemoteImage = { url: string; width: number; height: number };
 export type AnyImage = ImageMetadata | RemoteImage;
 export const isRemote = (i: AnyImage): i is RemoteImage => 'url' in i;
@@ -18,7 +18,7 @@ export type Review = {
   source: string;
   rating: number;
   outOf: 5 | 10;
-  date: string; // ГГГГ-ММ
+  date: string; // YYYY-MM
   text: string;
   lang: Lang;
   url?: string;
@@ -72,7 +72,7 @@ const paragraphs = (t?: string) => (t || '').split(/\n\s*\n/).map((p) => p.trim(
 const both = (o: any, fb = ''): L => ({ bg: o?.bg || fb, en: o?.en || o?.bg || fb });
 
 async function fromSanity(): Promise<Apartment[]> {
-  // SANITY_API_HOST — само за локални тестове срещу мок сървър
+  // SANITY_API_HOST: only for local tests against a mock server
   const apiHost = import.meta.env.SANITY_API_HOST as string | undefined;
   const client = createClient({ projectId, dataset, apiVersion: '2025-01-01', useCdn: false, ...(apiHost ? { apiHost, useProjectHostname: false } : {}) });
   const rows: any[] = await client.fetch(QUERY);
@@ -105,29 +105,29 @@ async function fromSanity(): Promise<Apartment[]> {
 }
 
 let cache: Promise<Apartment[]> | undefined;
-/** Всички публикувани апартаменти (зарежда се веднъж за целия билд) */
+/** All published apartments (fetched once per build) */
 export const getApartments = () => (cache ??= usingSanity ? fromSanity() : Promise.resolve(localApartments));
 
-/** Телефон във вид за линкове: +359886867053 */
+/** Phone formatted for tel: links, e.g. +359886867053 */
 export const telHref = (phone: string) => phone.replace(/[^\d+]/g, '');
 
 const WORDS = {
   bg: ['', 'един', 'два', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'],
   en: ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'],
 };
-/** Брой с думи („три“ / „three“), с главна буква при cap */
+/** Number spelled out in the given language (e.g. "three"), capitalized when cap is true */
 export const countWord = (n: number, lang: Lang, cap = false) => {
   const w = WORDS[lang][n] ?? String(n);
   return cap ? w.charAt(0).toUpperCase() + w.slice(1) : w;
 };
-/** Обхват „4–5“ или „5“ */
+/** Range such as "4–5", or "5" when all values match */
 export const range = (nums: (number | undefined)[]) => {
   const v = nums.filter((x): x is number => typeof x === 'number');
   if (!v.length) return '';
   const lo = Math.min(...v), hi = Math.max(...v);
   return lo === hi ? String(lo) : `${lo}–${hi}`;
 };
-/** Обобщение за всички апартаменти — за заглавия и описания */
+/** Summary across all apartments, for titles and descriptions */
 export const summary = (list: Apartment[]) => ({
   count: list.length,
   guests: range(list.map((a) => a.guests)),

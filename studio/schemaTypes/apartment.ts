@@ -1,6 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
-// Помощни полета за текст на два езика
+// Helpers for fields with Bulgarian and English text
 const bgEn = (name: string, title: string, opts: { rows?: number; required?: boolean; description?: string } = {}) =>
   defineField({
     name,

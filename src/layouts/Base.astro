@@ -9,10 +9,10 @@ interface Props {
   lang: Lang;
   title: string;
   description: string;
-  /** Пътят на същата страница на другия език, напр. { bg: '/bg/', en: '/en/' } */
+  /** Path of the same page in each language, e.g. { bg: '/bg/', en: '/en/' } */
   alternates: { bg: string; en: string };
   ogImage?: AnyImage;
-  /** Телефон за кръглия бутон „Обади се“ (само на страница на апартамент) */
+  /** Phone for the floating call button (apartment pages only) */
   callPhone?: string;
   jsonLd?: object[];
   heroPreload?: string;

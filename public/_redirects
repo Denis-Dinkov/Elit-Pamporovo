@@ -1,4 +1,4 @@
-# Пренасочвания (Cloudflare Pages / Netlify) — пазят старите адреси от Joomla сайта
+# Redirects (Cloudflare Pages / Netlify): keep the old Joomla site URLs working
 /admin            https://elitpamporovo.sanity.studio  302
 /                 /bg/              301
 /index.php        /bg/              301

@@ -5,7 +5,7 @@ export default defineCliConfig({
     projectId: process.env.SANITY_STUDIO_PROJECT_ID || '6y1hgmog',
     dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   },
-  // Админ панелът се публикува на https://<hostname>.sanity.studio
+  // The admin panel is deployed to https://<hostname>.sanity.studio
   studioHost: 'elitpamporovo',
   deployment: { appId: 'kfuoctmtomfp4g8ddrtrbrc5' },
 })

@@ -1,6 +1,6 @@
 import type { Apartment, Host } from '../lib/apartments';
 
-// Снимки
+// Photos
 import fdLiving from '../assets/photos/forest-dream/forest-dream-apartment.jpg';
 import fdLiving2 from '../assets/photos/forest-dream/forest-dream-2.jpg';
 import fdSofa from '../assets/photos/forest-dream/pamporovo-apartament-luskozen.jpg';
@@ -28,9 +28,9 @@ import rrTerrace2 from '../assets/photos/rodopski-rai/rodopski-rai-terasa-2.jpg'
 import rrBedroom2 from '../assets/photos/rodopski-rai/rodopski-rai-spalnia-2.jpg';
 import rrEntrance from '../assets/photos/rodopski-rai/rodopski-rai-vhod.jpg';
 
-// Резервни данни, когато Sanity още не е настроен. След като апартаментите са в админ панела,
-// този файл служи само за първоначално зареждане (scripts/seed-sanity.mjs).
-// Телефонът е от стария сайт — сменете го с телефона на домакина на всеки апартамент.
+// Fallback data used when Sanity is not configured. Once the apartments live in the admin panel,
+// this file only serves the initial import (studio/scripts/seed.mjs).
+// The phone number comes from the old site; replace it with each apartment's host phone.
 const defaultHost: Host = { phone: '+359 886 86 70 53', viber: true, whatsapp: true, languages: ['Български', 'English'] };
 
 const baseAmenities = {

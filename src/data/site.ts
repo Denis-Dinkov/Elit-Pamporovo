@@ -1,11 +1,11 @@
-// Основни данни за сайта — сменете тук и се обновява навсякъде.
+// Core site data: change it here and it updates everywhere.
 export const SITE = {
   url: 'https://elitpamporovo.com',
   name: 'Елит Пампорово',
   nameEn: 'Elit Pamporovo',
   locality: { bg: 'Пампорово', en: 'Pamporovo' },
   region: { bg: 'област Смолян', en: 'Smolyan Province' },
-  // TODO: попълнете точните координати на комплекса (от Google Maps → десен бутон → координати)
+  // TODO: fill in the complex's exact coordinates (Google Maps → right click → coordinates)
   geo: null as null | { lat: number; lng: number },
 };
 

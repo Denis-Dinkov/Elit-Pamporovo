@@ -1,5 +1,5 @@
-// Експорт на локалните апартаменти за studio/scripts/seed.mjs.
-// Генерира се САМО при SEED_EXPORT=1 — в нормалния билд този файл не създава нищо.
+// Exports the local apartments for studio/scripts/seed.mjs.
+// Generated ONLY when SEED_EXPORT=1; a normal build emits nothing for this route.
 import type { APIRoute } from 'astro';
 import { localApartments } from '../data/apartments';
 

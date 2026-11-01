@@ -1,10 +1,10 @@
-// Еднократно качва локалните апартаменти (с всички снимки) в Sanity, с вашия вход в Sanity CLI.
+// One-off import of the local apartments (with all photos) into Sanity, using your Sanity CLI login.
 //
-// 1) В корена на проекта:  SEED_EXPORT=1 npm run build && npm run preview
-// 2) В папка studio/:       npx sanity login   (веднъж)
-//                           npm run seed
+// 1) In the project root:  SEED_EXPORT=1 npm run build && npm run preview
+// 2) In studio/:           npx sanity login   (once)
+//                          npm run seed
 //
-// Повторно пускане презаписва същите документи (не създава дубликати).
+// Re-running overwrites the same documents (no duplicates).
 import { getCliClient } from 'sanity/cli';
 
 const { SEED_BASE = 'http://localhost:4321' } = process.env;
