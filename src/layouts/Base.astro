@@ -1,27 +1,31 @@
 ---
 import '../styles/global.css';
 import { getImage } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import { SITE, t, type Lang } from '../data/site';
+import { getApartments, isRemote, telHref, type AnyImage } from '../lib/apartments';
 import defaultOg from '../assets/photos/common/pamporovo-lift-zima-ski.jpg';
 
 interface Props {
   lang: Lang;
   title: string;
   description: string;
-  /** Пътят на същата страница на другия език, напр. { bg: '/bg/', en: '/en/' } */
+  /** Path of the same page in each language, e.g. { bg: '/bg/', en: '/en/' } */
   alternates: { bg: string; en: string };
-  ogImage?: ImageMetadata;
+  ogImage?: AnyImage;
+  /** Phone for the floating call button (apartment pages only) */
+  callPhone?: string;
   jsonLd?: object[];
   heroPreload?: string;
   transparentNav?: boolean;
 }
 
-const { lang, title, description, alternates, ogImage = defaultOg, jsonLd = [], transparentNav = false } = Astro.props;
+const { lang, title, description, alternates, ogImage = defaultOg, jsonLd = [], transparentNav = false, callPhone } = Astro.props;
 const s = t[lang];
 const canonical = new URL(alternates[lang], SITE.url).href;
-const og = await getImage({ src: ogImage, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
-const ogUrl = new URL(og.src, SITE.url).href;
+const ogUrl = isRemote(ogImage)
+  ? `${ogImage.url}?w=1200&h=630&fit=crop&fm=jpg&q=80`
+  : new URL((await getImage({ src: ogImage, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src, SITE.url).href;
+const apartments = await getApartments();
 const otherLang: Lang = lang === 'bg' ? 'en' : 'bg';
 const navLinks = [
   { href: s.home + '#day', label: s.nav.day },
@@ -76,13 +80,13 @@ const navLinks = [
       <nav class="nav__links" aria-label={lang === 'bg' ? 'Основно меню' : 'Main menu'}>
         {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
         <a href={alternates[otherLang]} hreflang={otherLang} lang={otherLang} class="nav__lang">{s.other}</a>
-        <a href={s.home + '#book'} class="btn btn--sm">{s.nav.book}</a>
+        <a href={s.home + '#contact'} class="btn btn--sm">{s.nav.book}</a>
         <details class="menu">
           <summary aria-label={lang === 'bg' ? 'Меню' : 'Menu'}><span></span><span></span><span></span></summary>
           <div class="menu__panel">
             <a href={s.home}>{s.breadcrumbsHome}</a>
             {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
-            <a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a>
+            <a href={s.home + '#contact'}>{s.nav.book}</a>
             <a href={alternates[otherLang]} hreflang={otherLang} lang={otherLang}>{s.other}</a>
           </div>
         </details>
@@ -100,13 +104,12 @@ const navLinks = [
       </div>
       <div>
         <p class="eyebrow">{s.nav.apartments}</p>
-        <slot name="footer-apartments" />
+        <ul class="footer__list">{apartments.map((a) => <li><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></li>)}</ul>
       </div>
       <div>
         <p class="eyebrow">{lang === 'bg' ? 'Контакти' : 'Contact'}</p>
         <ul class="footer__list">
-          <li><a href={`tel:${SITE.phone}`}>{SITE.phoneDisplay}</a></li>
-          <li><a href={`viber://chat?number=%2B${SITE.phone.slice(1)}`}>Viber</a> · <a href={`https://wa.me/${SITE.phone.slice(1)}`} rel="noopener">WhatsApp</a></li>
+          {apartments.map((a) => <li>{a.name[lang]}: <a href={`tel:${telHref(a.host.phone)}`}>{a.host.phone}</a></li>)}
           <li>{SITE.locality[lang]}, {SITE.region[lang]}</li>
         </ul>
       </div>
@@ -114,9 +117,9 @@ const navLinks = [
     <div class="wrap footer__bottom">© {new Date().getFullYear()} {lang === 'bg' ? SITE.name : SITE.nameEn}</div>
   </footer>
 
-  <a class="callfab" href={`tel:${SITE.phone}`} aria-label={s.call}>
+  {callPhone && <a class="callfab" href={`tel:${telHref(callPhone)}`} aria-label={s.call}>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
-  </a>
+  </a>}
 
   <script is:inline>
     (function(){var m=document.querySelector('.menu');if(!m)return;m.addEventListener('click',function(e){if(e.target.closest('a'))m.open=false});document.addEventListener('click',function(e){if(m.open&&!m.contains(e.target))m.open=false});})();

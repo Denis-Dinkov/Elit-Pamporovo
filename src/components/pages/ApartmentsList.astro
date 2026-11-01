@@ -1,21 +1,22 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ApartmentCard from '../ApartmentCard.astro';
-import BookingForm from '../BookingForm.astro';
 import { SITE, t, type Lang } from '../../data/site';
-import { apartments } from '../../data/apartments';
+import { getApartments, countWord, summary } from '../../lib/apartments';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
+const apartments = await getApartments();
+const sum = summary(apartments);
 const bg = lang === 'bg';
 const s = t[lang];
 const alternates = { bg: '/bg/apartamenti/', en: '/en/apartments/' };
 const title = bg
-  ? 'Апартаменти в Пампорово под наем | 3 апартамента до ски център Малина'
-  : 'Apartments in Pamporovo for Rent | 3 Holiday Apartments near Malina Ski Center';
+  ? 'Апартаменти в Пампорово под наем | Елит Пампорово до ски център Малина'
+  : 'Apartments in Pamporovo for Rent | Elit Pamporovo near Malina Ski Center';
 const desc = bg
-  ? 'Сравнете нашите 3 апартамента в Пампорово: с една или две спални, за 4–5 гости, 60–68 м², с тераса към гората и оборудвана кухня. Близо до ски център Малина.'
-  : 'Compare our 3 apartments in Pamporovo: one or two bedrooms, 4–5 guests, 60–68 m², forest-view terrace and full kitchen. Close to Malina Ski Center.';
+  ? `${countWord(sum.count, 'bg', true)} апартамента в Пампорово, всеки от своя собственик: за ${sum.guests} гости${sum.size ? `, ${sum.size} м²` : ''}, с тераса към гората. Близо до ски център Малина.`
+  : `${countWord(sum.count, 'en', true)} apartments in Pamporovo, each rented by its owner: ${sum.guests} guests${sum.size ? `, ${sum.size} m²` : ''}, forest-view terraces. Close to Malina Ski Center.`;
 
 const jsonLd = [
   {
@@ -36,9 +37,6 @@ const jsonLd = [
 ];
 ---
 <Base lang={lang} title={title} description={desc} alternates={alternates} jsonLd={jsonLd}>
-  <Fragment slot="footer-apartments">
-    <ul class="footer__list">{apartments.map((a) => <li><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></li>)}</ul>
-  </Fragment>
   <div class="wrap">
     <ol class="crumbs"><li><a href={s.home}>{s.breadcrumbsHome}</a></li><li aria-current="page">{s.nav.apartments}</li></ol>
   </div>
@@ -48,11 +46,10 @@ const jsonLd = [
       <h1 style="max-width:900px">{bg ? 'Апартаменти под наем в Пампорово' : 'Holiday apartments in Pamporovo'}</h1>
       <p class="lead" style="margin-top:20px">
         {bg
-          ? 'Три светли апартамента в комплекс „Елит Пампорово", сред смърчовата гора и близо до пистите. Всеки е с тераса към гората, оборудвана кухня и всичко за спокойна зимна или лятна почивка.'
-          : 'Three bright apartments in the Elit Pamporovo complex, set in the spruce forest close to the slopes. Each has a forest-view terrace, a fully equipped kitchen and everything for a relaxed winter or summer stay.'}
+          ? `${countWord(sum.count, 'bg', true)} апартамента в комплекс „Елит Пампорово“, сред смърчовата гора и близо до пистите. Всеки се отдава от своя собственик: изберете апартамент и се свържете директно с домакина за свободни дати и цена.`
+          : `${countWord(sum.count, 'en', true)} apartments in the Elit Pamporovo complex, set in the spruce forest close to the slopes. Each is rented out by its own owner: pick one and contact the host directly for availability and price.`}
       </p>
       <div class="cards">{apartments.map((a) => <ApartmentCard apt={a} lang={lang} headingLevel="h2" />)}</div>
     </div>
   </section>
-  <BookingForm lang={lang} />
 </Base>

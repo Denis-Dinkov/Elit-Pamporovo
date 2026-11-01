@@ -2,10 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import Photo from '../Photo.astro';
 import ApartmentCard from '../ApartmentCard.astro';
-import BookingForm from '../BookingForm.astro';
+import HostContact from '../HostContact.astro';
 import Reviews from '../Reviews.astro';
 import { SITE, t, type Lang } from '../../data/site';
-import { apartments, type Apartment } from '../../data/apartments';
+import { getApartments, isRemote, telHref, type Apartment } from '../../lib/apartments';
 import { getImage } from 'astro:assets';
 
 interface Props { lang: Lang; apt: Apartment }
@@ -14,20 +14,22 @@ const bg = lang === 'bg';
 const s = t[lang];
 const name = apt.name[lang];
 const m2 = bg ? 'м²' : 'm²';
+const apartments = await getApartments();
 
 const title = bg
   ? `${name}: апартамент за ${apt.guests} в Пампорово до ски център Малина`
   : `${name}: ${apt.bedrooms}-Bedroom Apartment in Pamporovo near Malina Ski Center`;
 const desc = bg
-  ? `${name}: ${s.bedrooms(apt.bedrooms)}, ${s.guests(apt.guests)}, ${apt.size} м², тераса с изглед към гората, оборудвана кухня. Близо до ски център Малина, Пампорово. Резервации: ${SITE.phoneDisplay}.`
-  : `${name}: ${s.bedrooms(apt.bedrooms)}, ${s.guests(apt.guests)}, ${apt.size} m², forest-view terrace, full kitchen. Close to Malina Ski Center, Pamporovo. Book: ${SITE.phoneDisplay}.`;
+  ? `${name}: ${s.bedrooms(apt.bedrooms)}, ${s.guests(apt.guests)}${apt.size ? `, ${apt.size} м²` : ''}, тераса с изглед към гората. Близо до ски център Малина, Пампорово. Свободни дати: ${apt.host.phone}.`
+  : `${name}: ${s.bedrooms(apt.bedrooms)}, ${s.guests(apt.guests)}${apt.size ? `, ${apt.size} m²` : ''}, forest-view terrace. Close to Malina Ski Center, Pamporovo. Availability: ${apt.host.phone}.`;
 
 const alternates = { bg: `/bg/${apt.slug.bg}/`, en: `/en/${apt.slug.en}/` };
 const url = new URL(alternates[lang], SITE.url).href;
 const [first, second, ...rest] = apt.photos;
 const others = apartments.filter((a) => a.id !== apt.id);
 const imgUrls = await Promise.all(
-  [apt.cover, ...apt.photos.slice(0, 5)].map(async (p) => new URL((await getImage({ src: p.src, width: 1200, format: 'jpg' })).src, SITE.url).href),
+  [apt.cover, ...apt.photos.slice(0, 5)].map(async (p) =>
+    isRemote(p.src) ? `${p.src.url}?w=1200&fm=jpg&q=80` : new URL((await getImage({ src: p.src, width: 1200, format: 'jpg' })).src, SITE.url).href),
 );
 
 const jsonLd = [
@@ -41,8 +43,9 @@ const jsonLd = [
     image: imgUrls,
     numberOfRooms: apt.bedrooms + 1,
     numberOfBedrooms: apt.bedrooms,
-    floorLevel: String(apt.floor),
-    floorSize: { '@type': 'QuantitativeValue', value: apt.size, unitCode: 'MTK' },
+    telephone: telHref(apt.host.phone),
+    ...(apt.floor != null ? { floorLevel: String(apt.floor) } : {}),
+    ...(apt.size ? { floorSize: { '@type': 'QuantitativeValue', value: apt.size, unitCode: 'MTK' } } : {}),
     occupancy: { '@type': 'QuantitativeValue', maxValue: apt.guests },
     amenityFeature: apt.amenities[lang].map((n) => ({ '@type': 'LocationFeatureSpecification', name: n, value: true })),
     containedInPlace: { '@id': SITE.url + '/#business' },
@@ -59,10 +62,7 @@ const jsonLd = [
   },
 ];
 ---
-<Base lang={lang} title={title} description={desc} alternates={alternates} ogImage={apt.cover.src} jsonLd={jsonLd}>
-  <Fragment slot="footer-apartments">
-    <ul class="footer__list">{apartments.map((a) => <li><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></li>)}</ul>
-  </Fragment>
+<Base lang={lang} title={title} description={desc} alternates={alternates} ogImage={apt.cover.src} jsonLd={jsonLd} callPhone={apt.host.phone}>
 
   <div class="wrap">
     <ol class="crumbs" aria-label={bg ? 'Навигация' : 'Breadcrumb'}>
@@ -71,11 +71,11 @@ const jsonLd = [
       <li aria-current="page">{name}</li>
     </ol>
     <div class="apt-head">
-      <span class="eyebrow">{bg ? `Апартамент в Пампорово · ${s.floor(apt.floor)}` : `Apartment in Pamporovo · ${s.floor(apt.floor)}`}</span>
+      <span class="eyebrow">{(bg ? 'Апартамент в Пампорово' : 'Apartment in Pamporovo') + (apt.floor != null ? ` · ${s.floor(apt.floor)}` : '')}</span>
       <h1>{bg && !name.startsWith('Апартамент') ? `Апартамент ${name}` : name}</h1>
       <p class="sub">{apt.tagline[lang]}</p>
       <ul class="specs">
-        <li>{s.guests(apt.guests)}</li><li>{s.bedrooms(apt.bedrooms)}</li><li>{apt.size} {m2}</li><li>{s.view}</li>
+        <li>{s.guests(apt.guests)}</li><li>{s.bedrooms(apt.bedrooms)}</li>{apt.size && <li>{apt.size} {m2}</li>}<li>{s.view}</li>
       </ul>
     </div>
     <div class:list={['apt-hero', { 'apt-hero--solo': !first }]}>
@@ -108,18 +108,24 @@ const jsonLd = [
         <dl>
           <dt>{bg ? 'Гости' : 'Guests'}</dt><dd>{s.guests(apt.guests)}</dd>
           <dt>{bg ? 'Спални' : 'Bedrooms'}</dt><dd>{apt.bedrooms}</dd>
-          <dt>{bg ? 'Площ' : 'Size'}</dt><dd>{apt.size} {m2}</dd>
-          <dt>{bg ? 'Етаж' : 'Floor'}</dt><dd>{apt.floor} ({bg ? 'ап.' : 'apt.'} {apt.number})</dd>
+          {apt.size && <><dt>{bg ? 'Площ' : 'Size'}</dt><dd>{apt.size} {m2}</dd></>}
+          {apt.floor != null && <><dt>{bg ? 'Етаж' : 'Floor'}</dt><dd>{apt.floor}{apt.number && ` (${bg ? 'ап.' : 'apt.'} ${apt.number})`}</dd></>}
+          {apt.checkIn && <><dt>{bg ? 'Настаняване' : 'Check-in'}</dt><dd>{apt.checkIn}</dd></>}
+          {apt.checkOut && <><dt>{bg ? 'Напускане' : 'Check-out'}</dt><dd>{apt.checkOut}</dd></>}
           <dt>{bg ? 'Пистите' : 'Slopes'}</dt><dd>{bg ? 'близо до ски център Малина' : 'close to Malina Ski Center'}</dd>
         </dl>
-        <a class="btn" href="#book">{bg ? 'Провери свободни дати' : 'Check availability'}</a>
-        <a class="btn" href={`tel:${SITE.phone}`} aria-label={`${s.call}: ${SITE.phoneDisplay}`}>☎ {SITE.phoneDisplay}</a>
+        <p class="aside__note">{bg ? 'Свободни дати и цена директно от домакина:' : 'Availability and price directly from the host:'}</p>
+        <HostContact apt={apt} lang={lang} compact />
       </aside>
     </div>
   </div>
 
   <Reviews reviews={apt.reviews} lang={lang} />
-  <BookingForm lang={lang} selected={apt.id} />
+  <section class="parch" id="contact">
+    <div class="wrap">
+      <HostContact apt={apt} lang={lang} />
+    </div>
+  </section>
 
   <section>
     <div class="wrap">

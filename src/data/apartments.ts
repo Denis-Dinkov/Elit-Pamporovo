@@ -1,6 +1,6 @@
-import type { ImageMetadata } from 'astro';
+import type { Apartment, Host } from '../lib/apartments';
 
-// Снимки
+// Photos
 import fdLiving from '../assets/photos/forest-dream/forest-dream-apartment.jpg';
 import fdLiving2 from '../assets/photos/forest-dream/forest-dream-2.jpg';
 import fdSofa from '../assets/photos/forest-dream/pamporovo-apartament-luskozen.jpg';
@@ -28,50 +28,10 @@ import rrTerrace2 from '../assets/photos/rodopski-rai/rodopski-rai-terasa-2.jpg'
 import rrBedroom2 from '../assets/photos/rodopski-rai/rodopski-rai-spalnia-2.jpg';
 import rrEntrance from '../assets/photos/rodopski-rai/rodopski-rai-vhod.jpg';
 
-export type Photo = { src: ImageMetadata; alt: { bg: string; en: string } };
-
-/**
- * Отзиви — поставяйте само истински отзиви, копирани от Booking, Airbnb или Google.
- * Пример:
- * {
- *   author: 'Мария',
- *   source: 'Booking.com',
- *   rating: 9.6,
- *   outOf: 10,
- *   date: '2025-02',
- *   text: 'Прекрасен апартамент, гледката към гората е невероятна…',
- *   lang: 'bg',
- *   url: 'https://www.booking.com/…',   // по желание — линк към оригинала
- * }
- */
-export type Review = {
-  author: string;
-  source: 'Booking.com' | 'Airbnb' | 'Google' | 'Facebook' | 'Директно';
-  rating: number;
-  outOf: 5 | 10;
-  date: string; // ГГГГ-ММ
-  text: string;
-  lang: 'bg' | 'en';
-  url?: string;
-};
-
-export type Apartment = {
-  id: string;
-  slug: { bg: string; en: string };
-  name: { bg: string; en: string };
-  tagline: { bg: string; en: string };
-  intro: { bg: string; en: string };
-  story: { bg: string[]; en: string[] };
-  bedrooms: number;
-  guests: number;
-  size: number;
-  floor: number;
-  number: number;
-  amenities: { bg: string[]; en: string[] };
-  cover: Photo;
-  photos: Photo[];
-  reviews: Review[];
-};
+// Fallback data used when Sanity is not configured. Once the apartments live in the admin panel,
+// this file only serves the initial import (studio/scripts/seed.mjs).
+// The phone number comes from the old site; replace it with each apartment's host phone.
+const defaultHost: Host = { phone: '+359 886 86 70 53', viber: true, whatsapp: true, languages: ['Български', 'English'] };
 
 const baseAmenities = {
   bg: ['Напълно оборудвана кухня', 'Съдомиялна машина', 'Кафе машина', 'Тераса с изглед към гората', 'Телевизор', 'Безплатен интернет'],
@@ -79,7 +39,7 @@ const baseAmenities = {
 };
 const washer = { bg: 'Пералня и сушилня', en: 'Washing machine & dryer' };
 
-export const apartments: Apartment[] = [
+export const localApartments: Apartment[] = [
   {
     id: 'forest-dream',
     slug: { bg: 'forest-dream', en: 'forest-dream' },
@@ -103,7 +63,8 @@ export const apartments: Apartment[] = [
     guests: 4,
     size: 60,
     floor: 5,
-    number: 82,
+    number: '82',
+    host: defaultHost,
     amenities: {
       bg: ['Голямо двойно легло', 'Голям удобен диван', ...baseAmenities.bg, washer.bg, 'Книги и настолни игри'],
       en: ['Large double bed', 'Large comfortable sofa', ...baseAmenities.en, washer.en, 'Books & board games'],
@@ -149,7 +110,8 @@ export const apartments: Apartment[] = [
     guests: 4,
     size: 60,
     floor: 5,
-    number: 83,
+    number: '83',
+    host: defaultHost,
     amenities: { bg: [...baseAmenities.bg, washer.bg], en: [...baseAmenities.en, washer.en] },
     cover: { src: rrLiving, alt: { bg: 'Дневна с трапезария и прозорец към заснежената гора, апартамент Родопски рай в Пампорово', en: 'Rhodope Paradise apartment living and dining area in Pamporovo' } },
     photos: [
@@ -188,7 +150,8 @@ export const apartments: Apartment[] = [
     guests: 5,
     size: 68,
     floor: 4,
-    number: 66,
+    number: '66',
+    host: defaultHost,
     amenities: { bg: [...baseAmenities.bg, washer.bg], en: [...baseAmenities.en, washer.en] },
     cover: { src: dhLiving, alt: { bg: "Трапезария и дневна на апартамент Deer's Home в Пампорово", en: "Deer's Home apartment dining and living area in Pamporovo" } },
     photos: [
@@ -198,4 +161,3 @@ export const apartments: Apartment[] = [
   },
 ];
 
-export const findBySlug = (lang: 'bg' | 'en', slug: string) => apartments.find((a) => a.slug[lang] === slug);

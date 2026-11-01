@@ -1,0 +1,46 @@
+---
+// Contact block for one apartment's host: guests check availability directly with them
+import { telHref, type Apartment } from '../lib/apartments';
+import type { Lang } from '../data/site';
+
+interface Props { apt: Apartment; lang: Lang; compact?: boolean }
+const { apt, lang, compact = false } = Astro.props;
+const bg = lang === 'bg';
+const h = apt.host;
+const name = apt.name[lang];
+const digits = telHref(h.phone).replace('+', '');
+const msg = bg
+  ? `Здравейте! Интересувам се от апартамент ${name} в Елит Пампорово. Свободен ли е за датите: `
+  : `Hello! I'm interested in the ${name} apartment at Elit Pamporovo. Is it available for these dates: `;
+const subject = bg ? `Запитване за апартамент ${name}` : `Enquiry about ${name}`;
+const icon = {
+  phone: '<path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/>',
+  chat: '<path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/>',
+  mail: '<path d="M3 5h18v14H3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+};
+---
+<div class:list={['host', { 'host--compact': compact }]}>
+  {!compact && (
+    <>
+      <span class="eyebrow">{bg ? 'Свободни дати и цени' : 'Availability & prices'}</span>
+      <h2 class="host__title">{bg ? 'Свържете се директно с домакина' : 'Contact the host directly'}</h2>
+      <p class="host__lead">
+        {bg
+          ? 'Всеки апартамент в комплекса се отдава от своя собственик. Пишете или се обадете, за да проверите дали е свободен за вашите дати.'
+          : 'Each apartment in the complex is rented out by its own owner. Call or message them to check if it is free for your dates.'}
+      </p>
+    </>
+  )}
+  {(h.name || h.languages?.length) && (
+    <p class="host__who">
+      {h.name && <strong>{h.name}</strong>}
+      {h.languages?.length ? <span>{(bg ? 'Говори: ' : 'Speaks: ') + h.languages.join(', ')}</span> : null}
+    </p>
+  )}
+  <div class="host__actions">
+    <a class="btn btn--solid" href={`tel:${telHref(h.phone)}`}><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" set:html={icon.phone} />{h.phone}</a>
+    {h.whatsapp && <a class="btn" href={`https://wa.me/${digits}?text=${encodeURIComponent(msg)}`} target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" set:html={icon.chat} />WhatsApp</a>}
+    {h.viber && <a class="btn" href={`viber://chat?number=%2B${digits}`}><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" set:html={icon.chat} />Viber</a>}
+    {h.email && <a class="btn" href={`mailto:${h.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`}><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" set:html={icon.mail} />{bg ? 'Имейл' : 'Email'}</a>}
+  </div>
+</div>
