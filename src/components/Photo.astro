@@ -21,7 +21,8 @@ const h = Math.round((maxW * src.height) / src.width);
 const cdn = (w: number) => isRemote(src) ? `${src.url}?w=${w}&q=${quality}&fit=max&auto=format` : '';
 ---
 {isRemote(src) ? (
-  <img
+  // Wrapped in <picture> like Astro's <Picture>, so layout CSS treats both kinds of image the same
+  <picture><img
     src={cdn(maxW)}
     srcset={usable.map((w) => `${cdn(w)} ${w}w`).join(', ')}
     sizes={sizes}
@@ -32,7 +33,7 @@ const cdn = (w: number) => isRemote(src) ? `${src.url}?w=${w}&q=${quality}&fit=m
     decoding={eager ? 'sync' : 'async'}
     fetchpriority={eager ? 'high' : 'auto'}
     class={cls}
-  />
+  /></picture>
 ) : (
   <Picture
     src={src}
