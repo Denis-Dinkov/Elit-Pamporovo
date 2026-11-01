@@ -1,4 +1,4 @@
-// Експорт на локалните апартаменти за scripts/seed-sanity.mjs.
+// Експорт на локалните апартаменти за studio/scripts/seed.mjs.
 // Генерира се САМО при SEED_EXPORT=1 — в нормалния билд този файл не създава нищо.
 import type { APIRoute } from 'astro';
 import { localApartments } from '../data/apartments';

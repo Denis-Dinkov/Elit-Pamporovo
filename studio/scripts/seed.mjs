@@ -1,18 +1,15 @@
-// Еднократно качва локалните апартаменти (с всички снимки) в Sanity.
+// Еднократно качва локалните апартаменти (с всички снимки) в Sanity, с вашия вход в Sanity CLI.
 //
-// 1) В единия терминал:  SEED_EXPORT=1 npm run build && npm run preview
-// 2) В другия:           SANITY_PROJECT_ID=xxx SANITY_WRITE_TOKEN=yyy node scripts/seed-sanity.mjs
+// 1) В корена на проекта:  SEED_EXPORT=1 npm run build && npm run preview
+// 2) В папка studio/:       npx sanity login   (веднъж)
+//                           npm run seed
 //
-// Токен с права „Editor“ се създава от sanity.io/manage → проекта → API → Tokens.
 // Повторно пускане презаписва същите документи (не създава дубликати).
-import { createClient } from '@sanity/client';
+import { getCliClient } from 'sanity/cli';
 
-const { SANITY_PROJECT_ID: projectId, SANITY_DATASET: dataset = 'production', SANITY_WRITE_TOKEN: token, SEED_BASE = 'http://localhost:4321' } = process.env;
-if (!projectId || !token) {
-  console.error('Липсват SANITY_PROJECT_ID и/или SANITY_WRITE_TOKEN.');
-  process.exit(1);
-}
-const client = createClient({ projectId, dataset, token, apiVersion: '2025-01-01', useCdn: false });
+const { SEED_BASE = 'http://localhost:4321' } = process.env;
+const client = getCliClient({ apiVersion: '2025-01-01' });
+const { projectId, dataset } = client.config();
 
 const res = await fetch(`${SEED_BASE}/__seed.json`);
 if (!res.ok) {

@@ -4,7 +4,7 @@ import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './schemaTypes'
 
 // projectId идва от SANITY_STUDIO_PROJECT_ID (файл .env в тази папка) — вижте README
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'your-project-id'
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID || '6y1hgmog'
 const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
 
 export default defineConfig({

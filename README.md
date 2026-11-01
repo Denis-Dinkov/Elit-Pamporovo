@@ -27,10 +27,10 @@ npm run preview   # преглед на билда
    ```
    Публикува админ панела на `elitpamporovo.sanity.studio`.
 3. Поканете потребителите: sanity.io/manage → проекта → **Members** → Invite (по имейл, роля Administrator).
-4. Пренесете текущите апартаменти със снимките (токен с права Editor от **API → Tokens**):
+4. Пренесете текущите апартаменти със снимките (ползва вашия вход от `sanity login`):
    ```bash
-   SEED_EXPORT=1 npm run build && npm run preview          # терминал 1
-   SANITY_PROJECT_ID=xxx SANITY_WRITE_TOKEN=yyy node scripts/seed-sanity.mjs   # терминал 2
+   SEED_EXPORT=1 npm run build && npm run preview   # терминал 1, в корена
+   cd studio && npm run seed                         # терминал 2
    ```
 5. Във Vercel → Settings → Environment Variables добавете `PUBLIC_SANITY_PROJECT_ID` и `PUBLIC_SANITY_DATASET=production`.
 6. Автоматично обновяване на сайта при публикуване:
