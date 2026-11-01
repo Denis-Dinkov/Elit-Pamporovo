@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Photo from '../Photo.astro';
+import Gallery from '../Gallery.astro';
+import Lightbox from '../Lightbox.astro';
 import ApartmentCard from '../ApartmentCard.astro';
 import HostContact from '../HostContact.astro';
 import Reviews from '../Reviews.astro';
@@ -79,13 +80,13 @@ const jsonLd = [
       </ul>
     </div>
     <div class:list={['apt-hero', { 'apt-hero--solo': !first }]}>
-      <Photo src={apt.cover.src} alt={apt.cover.alt[lang]} widths={[640, 960, 1400]} sizes="(max-width: 860px) 100vw, 66vw" eager />
+      <Gallery photos={[apt.cover]} lang={lang} widths={[640, 960, 1400]} sizes="(max-width: 860px) 100vw, 66vw" eagerFirst />
       {first && (
         <div class="stack">
-          <Photo src={first.src} alt={first.alt[lang]} widths={[400, 700]} sizes="(max-width: 860px) 50vw, 33vw" />
-          {second && <Photo src={second.src} alt={second.alt[lang]} widths={[400, 700]} sizes="(max-width: 860px) 50vw, 33vw" />}
+          <Gallery photos={second ? [first, second] : [first]} lang={lang} sizes="(max-width: 860px) 50vw, 33vw" />
         </div>
       )}
+      {apt.photos.length > 0 && <span class="apt-hero__count">{bg ? `Всички ${apt.photos.length + 1} снимки` : `All ${apt.photos.length + 1} photos`}</span>}
     </div>
 
     <div class="apt-body">
@@ -98,7 +99,7 @@ const jsonLd = [
           <>
             <h2 style="font-size:clamp(24px,2.6vw,30px);margin:40px 0 0">{s.gallery}</h2>
             <div class="grid-photos">
-              {rest.map((p) => <Photo src={p.src} alt={p.alt[lang]} widths={[400, 700]} sizes="(max-width: 860px) 50vw, 300px" />)}
+              <Gallery photos={rest} lang={lang} />
             </div>
           </>
         )}
@@ -121,6 +122,7 @@ const jsonLd = [
   </div>
 
   <Reviews reviews={apt.reviews} lang={lang} />
+  <Lightbox lang={lang} />
   <section class="parch" id="contact">
     <div class="wrap">
       <HostContact apt={apt} lang={lang} />

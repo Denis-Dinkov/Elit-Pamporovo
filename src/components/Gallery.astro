@@ -1,0 +1,23 @@
+---
+// Photos that open full screen: each one links to a large version (works without JS),
+// and Lightbox.astro intercepts the click to show them all in a swipeable <dialog>
+import { getImage } from 'astro:assets';
+import Photo from './Photo.astro';
+import { isRemote, type Photo as P } from '../lib/apartments';
+import type { Lang } from '../data/site';
+
+interface Props { photos: P[]; lang: Lang; sizes?: string; widths?: number[]; eagerFirst?: boolean }
+const { photos, lang, sizes = '(max-width: 860px) 50vw, 300px', widths = [400, 700], eagerFirst = false } = Astro.props;
+const full = await Promise.all(
+  photos.map(async ({ src }) =>
+    isRemote(src)
+      ? `${src.url}?w=${Math.min(1800, src.width)}&q=80&fit=max&auto=format`
+      : (await getImage({ src, width: Math.min(1800, src.width), format: 'webp', quality: 78 })).src,
+  ),
+);
+---
+{photos.map((p, i) => (
+  <a href={full[i]} class="lb" data-lb data-alt={p.alt[lang]}>
+    <Photo src={p.src} alt={p.alt[lang]} widths={widths} sizes={sizes} eager={eagerFirst && i === 0} />
+  </a>
+))}
