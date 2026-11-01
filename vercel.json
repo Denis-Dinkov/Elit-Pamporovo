@@ -6,6 +6,16 @@
   "trailingSlash": true,
   "redirects": [
     {
+      "source": "/admin",
+      "destination": "https://elitpamporovo.sanity.studio",
+      "statusCode": 302
+    },
+    {
+      "source": "/admin/",
+      "destination": "https://elitpamporovo.sanity.studio",
+      "statusCode": 302
+    },
+    {
       "source": "/",
       "destination": "/bg/",
       "statusCode": 301

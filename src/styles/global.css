@@ -240,3 +240,26 @@ section{padding:clamp(64px,9vw,104px) 0}
 @media (max-width:760px){.callfab{display:grid}}
 
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* Контакт с домакина */
+.ico{width:18px;height:18px;fill:currentColor;flex:none}
+.btn--solid{background:var(--slate);color:var(--snow);border-color:var(--slate)}
+.btn--solid:hover{background:var(--teal);border-color:var(--teal)}
+.host{max-width:760px}
+.host__title{font-size:clamp(28px,3.6vw,40px);margin-bottom:12px}
+.host__lead{color:var(--muted);font-size:17px;margin-bottom:20px}
+.host__who{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:14px;font-size:16px}
+.host__who span{color:var(--stone);font-size:14px}
+.host__actions{display:flex;flex-wrap:wrap;gap:10px}
+.host__actions .btn{letter-spacing:.06em}
+.host--compact .host__actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.host--compact .host__actions .btn:first-child{grid-column:1/-1}
+.host--compact .host__actions .btn{min-height:44px;padding:8px 12px;font-size:12px}
+.apt-body .aside__note{font-size:14px;color:var(--muted);margin:4px 0 10px}
+.contacts{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:24px;margin-top:36px}
+.contact-card{background:var(--snow);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:6px}
+.contact-card__img{display:block;border-radius:8px;overflow:hidden;margin-bottom:8px}
+.contact-card__img img{aspect-ratio:16/10;object-fit:cover;width:100%}
+.contact-card h3 a{text-decoration:none}.contact-card h3 a:hover{text-decoration:underline}
+.contact-card__meta{color:var(--stone);font-size:14px;margin-bottom:6px}
+@media (max-width:480px){.host__actions .btn{flex:1 1 100%}}

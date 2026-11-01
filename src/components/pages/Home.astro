@@ -2,9 +2,9 @@
 import Base from '../../layouts/Base.astro';
 import Photo from '../Photo.astro';
 import ApartmentCard from '../ApartmentCard.astro';
-import BookingForm from '../BookingForm.astro';
+import HostContact from '../HostContact.astro';
 import { SITE, t, type Lang } from '../../data/site';
-import { apartments } from '../../data/apartments';
+import { getApartments, countWord, summary, telHref } from '../../lib/apartments';
 import { getImage } from 'astro:assets';
 
 import heroImg from '../../assets/photos/common/pamporovo-lift-zima-ski.jpg';
@@ -23,15 +23,19 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const bg = lang === 'bg';
 const s = t[lang];
+const apartments = await getApartments();
+const sum = summary(apartments);
+const N = { bg: countWord(sum.count, 'bg'), en: countWord(sum.count, 'en') };
+const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
 const C = bg ? {
   title: 'Апартаменти под наем в Пампорово до ски център Малина | Елит Пампорово',
-  desc: '3 уютни апартамента в Пампорово с изглед към гората, близо до ски център Малина. За 4–5 гости, оборудвана кухня, тераса. Резервации: 0886 86 70 53.',
+  desc: `${cap(N.bg)} уютни апартамента в Пампорово с изглед към гората, близо до ски център Малина. За ${sum.guests} гости, всеки от своя собственик. Свържете се директно с домакина.`,
   eyebrow: 'Пампорово · Родопите · ски център Малина',
   h1: ['Апартаменти в Пампорово за зима, която ', 'ще помните'],
-  lead: 'Три уютни апартамента сред смърчовата гора, близо до ски център Малина. Сутрин ви чакат пресен сняг и слънце. Вечер: топлина, настолни игри и тишина, каквато в града няма.',
-  cta1: 'Провери свободни дати', cta2: 'Разгледай апартаментите',
-  facts: [['3', 'апартамента'], ['до 5', 'гости'], ['60–68 м²', 'простор']],
+  lead: `${cap(N.bg)} уютни апартамента сред смърчовата гора, близо до ски център Малина. Сутрин ви чакат пресен сняг и слънце. Вечер: топлина, настолни игри и тишина, каквато в града няма.`,
+  cta1: 'Свържете се с домакин', cta2: 'Разгледай апартаментите',
+  facts: [[String(sum.count), 'апартамента'], [`до ${sum.maxGuests}`, 'гости'], ...(sum.size ? [[`${sum.size} м²`, 'простор']] : [])],
   promiseEyebrow: 'Защо хората се връщат',
   promise: '„Не наемате просто апартамент. Наемате седмица, за която ще разказвате до следващата зима."',
   promiseText: 'Подредихме всеки апартамент така, както бихме искали да посрещнат нас: светло, топло, с всичко нужно за ски ваканция и с тераса, от която гледате гората.',
@@ -43,7 +47,7 @@ const C = bg ? {
     ['15:00', 'Следобед', 'Разходка по заснежените пътеки, където сърничките идват почти до терасата. Децата не вярват на очите си.'],
     ['20:00', 'Вечер', 'Голям диван, книги, настолни игри и чаша родопско вино. Тук вечерите стават най-хубавата част от деня.'],
   ],
-  aptEyebrow: 'Апартаментите', aptH: 'Три дома в гората. Изберете своя.',
+  aptEyebrow: 'Апартаментите', aptH: `${cap(N.bg)} дома в гората. Изберете своя.`,
   winterEyebrow: 'Ски почивка в Пампорово', winterH: 'Сняг, слънце и писти за всеки',
   winterText: 'Пампорово е от най-слънчевите ски курорти в България и отлично място за начинаещи и семейства. От първите плахи завои на децата до черната „Стена", тук има писта за всеки. А когато краката кажат „стига", ви чакат разходки в гората, шейни и родопска кухня.',
   stats: [['1926 м', 'връх Снежанка'], ['~30 км', 'ски писти'], ['13', 'лифта'], ['дек – апр', 'ски сезон']],
@@ -53,24 +57,24 @@ const C = bg ? {
     ['До пистите', 'Комплексът е близо до ски център Малина. Повече време на снега, по-малко в колата.'],
     ['Сухи и топли', 'Пералня и сушилня в апартаментите, за да обувате сухи и топли дрехи всяка сутрин.'],
     ['Гората до вас', 'Тераса с изглед към гората, птички и сърнички. Природата е част от престоя.'],
-    ['Лично отношение', 'Говорите директно със собствениците, без посредници и без скрити такси.'],
+    ['Директно от собственика', 'Всеки апартамент се отдава от своя собственик. Говорите директно с домакина, без посредници и без скрити такси.'],
   ],
   faqH: 'Често задавани въпроси',
   faq: [
-    ['Колко близо са апартаментите до пистите?', 'Комплекс „Елит Пампорово" се намира близо до ски център Малина в Пампорово. Обадете се и ще ви разкажем как най-лесно да стигнете до лифта.'],
-    ['Колко души могат да отседнат?', 'Forest Dream и Родопски рай са с една спалня и побират до 4 гости. Deer\'s Home е с две спални и побира до 5 гости.'],
-    ['Какво е включено в апартаментите?', 'Всички апартаменти имат напълно оборудвана кухня със съдомиялна и кафе машина, тераса с изглед към гората, телевизор и безплатен интернет. Всички имат и пералня със сушилня.'],
+    ['Колко близо са апартаментите до пистите?', 'Комплекс „Елит Пампорово“ се намира близо до ски център Малина в Пампорово.'],
+    ['Колко души могат да отседнат?', apartments.map((a) => `${a.name.bg}: до ${a.guests} гости`).join('. ') + '.'],
+    ['Какво е включено в апартаментите?', 'Удобствата се различават според апартамента и са описани на страницата на всеки от тях. Всички са с оборудвана кухня и тераса с изглед към гората.'],
     ['Подходящи ли са апартаментите и за лятна почивка?', 'Да. Лятото в Родопите е прохладно и зелено, идеално за разходки в гората, планинско колоездене и почивка далеч от жегата.'],
-    ['Как да направя резервация?', `Обадете се на ${SITE.phoneDisplay}, пишете ни във Viber или WhatsApp, или изпратете запитване през формата на сайта.`],
+    ['Как да резервирам?', 'Всеки апартамент се отдава от своя собственик. Изберете апартамент и се свържете с домакина му по телефон, Viber, WhatsApp или имейл, за да проверите свободните дати и цената.'],
   ],
 } : {
   title: 'Pamporovo Apartments for Rent near Malina Ski Center | Elit Pamporovo',
-  desc: '3 cozy apartments in Pamporovo, Bulgaria with forest views, close to Malina Ski Center. Sleep 4–5 guests, full kitchen, terrace. Book: +359 886 86 70 53.',
+  desc: `${cap(N.en)} cozy apartments in Pamporovo, Bulgaria with forest views, close to Malina Ski Center. ${sum.guests} guests, each rented by its owner. Contact the host directly.`,
   eyebrow: 'Pamporovo · Rhodope Mountains · Malina Ski Center',
   h1: ['Pamporovo apartments for a winter ', 'you will remember'],
-  lead: 'Three cozy apartments in the spruce forest, close to Malina Ski Center. Mornings of fresh snow and sunshine. Evenings of warmth, board games and a silence the city never has.',
-  cta1: 'Check availability', cta2: 'See the apartments',
-  facts: [['3', 'apartments'], ['up to 5', 'guests'], ['60–68 m²', 'of space']],
+  lead: `${cap(N.en)} cozy apartments in the spruce forest, close to Malina Ski Center. Mornings of fresh snow and sunshine. Evenings of warmth, board games and a silence the city never has.`,
+  cta1: 'Contact a host', cta2: 'See the apartments',
+  facts: [[String(sum.count), 'apartments'], [`up to ${sum.maxGuests}`, 'guests'], ...(sum.size ? [[`${sum.size} m²`, 'of space']] : [])],
   promiseEyebrow: 'Why guests come back',
   promise: '"You are not just renting an apartment. You are renting a week you will talk about until next winter."',
   promiseText: 'We set up each apartment the way we would want to be welcomed: bright, warm, with everything a ski holiday needs and a terrace overlooking the forest.',
@@ -82,7 +86,7 @@ const C = bg ? {
     ['15:00', 'Afternoon', 'A walk along snowy trails where deer come almost to the terrace. The kids can hardly believe it.'],
     ['20:00', 'Evening', 'A big sofa, books, board games and a glass of Rhodope wine. Here, evenings become the best part of the day.'],
   ],
-  aptEyebrow: 'The apartments', aptH: 'Three homes in the forest. Pick yours.',
+  aptEyebrow: 'The apartments', aptH: `${cap(N.en)} homes in the forest. Pick yours.`,
   winterEyebrow: 'Ski holidays in Pamporovo', winterH: 'Snow, sunshine and slopes for everyone',
   winterText: 'Pamporovo is one of the sunniest ski resorts in Bulgaria and a great choice for beginners and families. From the kids\' first turns to the black "Wall" run, there is a slope for everyone, plus forest walks, sledging and Rhodope cuisine when your legs say enough.',
   stats: [['1,926 m', 'Snezhanka peak'], ['~30 km', 'of ski runs'], ['13', 'lifts'], ['Dec – Apr', 'ski season']],
@@ -92,15 +96,15 @@ const C = bg ? {
     ['Close to the slopes', 'The complex is close to Malina Ski Center. More time on snow, less in the car.'],
     ['Dry and warm', 'Washer and dryer in the apartments, so you put on dry, warm gear every morning.'],
     ['Forest on your doorstep', 'Forest-view terraces, birds and deer. Nature is part of your stay.'],
-    ['Personal touch', 'You talk directly with the owners, with no middlemen and no hidden fees.'],
+    ['Straight from the owner', 'Each apartment is rented out by its own owner. You talk directly with the host, with no middlemen and no hidden fees.'],
   ],
   faqH: 'Frequently asked questions',
   faq: [
-    ['How close are the apartments to the slopes?', 'Elit Pamporovo is located close to Malina Ski Center in Pamporovo. Give us a call and we will tell you the easiest way to the lift.'],
-    ['How many guests can stay?', 'Forest Dream and Rhodope Paradise have one bedroom and sleep up to 4. Deer\'s Home has two bedrooms and sleeps up to 5.'],
-    ['What is included?', 'Every apartment has a fully equipped kitchen with dishwasher and coffee machine, a forest-view terrace, TV and free Wi‑Fi. All of them also have a washer and dryer.'],
+    ['How close are the apartments to the slopes?', 'The Elit Pamporovo complex is located close to Malina Ski Center in Pamporovo.'],
+    ['How many guests can stay?', apartments.map((a) => `${a.name.en}: up to ${a.guests} guests`).join('. ') + '.'],
+    ['What is included?', 'Amenities differ by apartment and are listed on each apartment page. All have an equipped kitchen and a forest-view terrace.'],
     ['Are the apartments good for a summer holiday too?', 'Yes. Summer in the Rhodopes is cool and green, perfect for forest walks, mountain biking and escaping the heat.'],
-    ['How do I book?', `Call ${SITE.phoneDisplay}, message us on Viber or WhatsApp, or send an enquiry through the form on this site.`],
+    ['How do I book?', 'Each apartment is rented out by its own owner. Pick an apartment and contact its host by phone, Viber, WhatsApp or email to check availability and price.'],
   ],
 };
 
@@ -128,7 +132,6 @@ const jsonLd = [
     alternateName: bg ? SITE.nameEn : SITE.name,
     description: C.desc,
     url: new URL(alt[lang], SITE.url).href,
-    telephone: SITE.phone,
     image: new URL(hero.src, SITE.url).href,
     logo: ogLogo,
     address: { '@type': 'PostalAddress', addressLocality: SITE.locality[lang], addressRegion: SITE.region[lang], addressCountry: 'BG' },
@@ -141,8 +144,9 @@ const jsonLd = [
       url: new URL(`/${lang}/${a.slug[lang]}/`, SITE.url).href,
       numberOfRooms: a.bedrooms + 1,
       numberOfBedrooms: a.bedrooms,
-      floorSize: { '@type': 'QuantitativeValue', value: a.size, unitCode: 'MTK' },
+      ...(a.size ? { floorSize: { '@type': 'QuantitativeValue', value: a.size, unitCode: 'MTK' } } : {}),
       occupancy: { '@type': 'QuantitativeValue', maxValue: a.guests },
+      telephone: telHref(a.host.phone),
     })),
     knowsLanguage: ['bg', 'en'],
     inLanguage: lang,
@@ -156,9 +160,6 @@ const jsonLd = [
 ];
 ---
 <Base lang={lang} title={C.title} description={C.desc} alternates={alt} jsonLd={jsonLd} transparentNav>
-  <Fragment slot="footer-apartments">
-    <ul class="footer__list">{apartments.map((a) => <li><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></li>)}</ul>
-  </Fragment>
 
   <section class="hero">
     <Photo src={heroImg} alt={bg ? 'Ски лифт и заснежени смърчове в Пампорово' : 'Ski lift and snowy spruces in Pamporovo'} widths={[640, 1024, 1600]} sizes="100vw" eager quality={50} class="hero__img" />
@@ -168,7 +169,7 @@ const jsonLd = [
       <h1>{C.h1[0]}<em>{C.h1[1]}</em></h1>
       <p class="lead">{C.lead}</p>
       <div class="actions">
-        <a href="#book" class="btn btn--light">{C.cta1}</a>
+        <a href="#contact" class="btn btn--light">{C.cta1}</a>
         <a href="#apartments" class="btn btn--light btn--ghost">{C.cta2}</a>
       </div>
       <ul class="facts">{C.facts.map(([n, l]) => <li><strong>{n}</strong>{l}</li>)}</ul>
@@ -251,7 +252,27 @@ const jsonLd = [
     </div>
   </section>
 
-  <BookingForm lang={lang} />
+  <section class="parch" id="contact">
+    <div class="wrap">
+      <span class="eyebrow">{s.nav.book}</span>
+      <h2 style="max-width:760px">{bg ? 'Свържете се директно с домакина' : 'Contact the host directly'}</h2>
+      <p class="lead" style="margin-top:14px">{bg
+        ? 'Всеки апартамент се отдава от своя собственик. Изберете апартамент и попитайте домакина му за свободни дати и цена.'
+        : 'Each apartment is rented out by its own owner. Pick an apartment and ask its host about availability and price.'}</p>
+      <ul class="contacts">
+        {apartments.map((a) => (
+          <li class="contact-card">
+            <a class="contact-card__img" href={`/${lang}/${a.slug[lang]}/`} tabindex="-1" aria-hidden="true">
+              <Photo src={a.cover.src} alt="" widths={[300, 500]} sizes="(max-width: 760px) 100vw, 300px" />
+            </a>
+            <h3><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></h3>
+            <p class="contact-card__meta">{s.guests(a.guests)} · {s.bedrooms(a.bedrooms)}</p>
+            <HostContact apt={a} lang={lang} compact />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
   <script is:inline>
     (function(){

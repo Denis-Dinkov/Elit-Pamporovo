@@ -3,10 +3,6 @@ export const SITE = {
   url: 'https://elitpamporovo.com',
   name: 'Елит Пампорово',
   nameEn: 'Elit Pamporovo',
-  phone: '+359886867053',
-  phoneDisplay: '+359 886 86 70 53',
-  // TODO: попълнете реален имейл — използва се от формата за запитване
-  email: '',
   locality: { bg: 'Пампорово', en: 'Pamporovo' },
   region: { bg: 'област Смолян', en: 'Smolyan Province' },
   // TODO: попълнете точните координати на комплекса (от Google Maps → десен бутон → координати)
@@ -17,7 +13,7 @@ export type Lang = 'bg' | 'en';
 
 export const t = {
   bg: {
-    nav: { day: 'Един ден тук', apartments: 'Апартаменти', winter: 'Зимата', ski: 'Ски в Пампорово', book: 'Запитване' },
+    nav: { day: 'Един ден тук', apartments: 'Апартаменти', winter: 'Зимата', ski: 'Ски в Пампорово', book: 'Контакти' },
     home: '/bg/',
     apartments: '/bg/apartamenti/',
     blog: '/bg/blog/ski-v-pamporovo/',
@@ -37,7 +33,7 @@ export const t = {
     footer: 'Апартаменти под наем в Пампорово, близо до ски център Малина.',
   },
   en: {
-    nav: { day: 'A day here', apartments: 'Apartments', winter: 'Winter', ski: 'Skiing in Pamporovo', book: 'Enquire' },
+    nav: { day: 'A day here', apartments: 'Apartments', winter: 'Winter', ski: 'Skiing in Pamporovo', book: 'Contact' },
     home: '/en/',
     apartments: '/en/apartments/',
     blog: '/en/blog/skining-pamporovo/',

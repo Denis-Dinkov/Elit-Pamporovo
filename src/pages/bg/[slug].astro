@@ -1,8 +1,9 @@
 ---
 import ApartmentDetail from '../../components/pages/ApartmentDetail.astro';
-import { apartments } from '../../data/apartments';
+import { getApartments } from '../../lib/apartments';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const apartments = await getApartments();
   return apartments.map((apt) => ({ params: { slug: apt.slug.bg }, props: { apt } }));
 }
 const { apt } = Astro.props;

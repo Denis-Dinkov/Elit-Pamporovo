@@ -1,7 +1,7 @@
 ---
-// Показва се само ако апартаментът има поне един отзив в src/data/apartments.ts
+// Показва се само ако апартаментът има поне един отзив (добавят се от админ панела)
 import { t, type Lang } from '../data/site';
-import type { Review } from '../data/apartments';
+import type { Review } from '../lib/apartments';
 
 interface Props { reviews: Review[]; lang: Lang }
 const { reviews, lang } = Astro.props;

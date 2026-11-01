@@ -1,7 +1,7 @@
 ---
 import Photo from './Photo.astro';
 import { t, type Lang } from '../data/site';
-import type { Apartment } from '../data/apartments';
+import type { Apartment } from '../lib/apartments';
 
 interface Props { apt: Apartment; lang: Lang; headingLevel?: 'h2' | 'h3' }
 const { apt, lang, headingLevel = 'h3' } = Astro.props;
@@ -19,8 +19,8 @@ const href = `/${lang}/${apt.slug[lang]}/`;
   <p>{apt.intro[lang]}</p>
   <ul class="specs">
     <li>{s.bedrooms(apt.bedrooms)}</li>
-    <li>{apt.size} {lang === 'bg' ? 'м²' : 'm²'}</li>
-    <li>{s.floor(apt.floor)}</li>
+    {apt.size && <li>{apt.size} {lang === 'bg' ? 'м²' : 'm²'}</li>}
+    {apt.floor != null && <li>{s.floor(apt.floor)}</li>}
     <li>{s.view}</li>
   </ul>
   <span class="more">{s.more} {apt.name[lang]} →</span>

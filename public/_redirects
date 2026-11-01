@@ -1,4 +1,5 @@
 # Пренасочвания (Cloudflare Pages / Netlify) — пазят старите адреси от Joomla сайта
+/admin            https://elitpamporovo.sanity.studio  302
 /                 /bg/              301
 /index.php        /bg/              301
 /bg/blog          /bg/blog/ski-v-pamporovo/   301

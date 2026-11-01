@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Photo from '../Photo.astro';
 import ApartmentCard from '../ApartmentCard.astro';
 import { SITE, t, type Lang } from '../../data/site';
-import { apartments } from '../../data/apartments';
+import { getApartments } from '../../lib/apartments';
 import { getImage } from 'astro:assets';
 import cover from '../../assets/photos/common/ski-pamporovo.jpg';
 import map from '../../assets/photos/common/ski-karta-pamporovo.jpg';
@@ -11,6 +11,7 @@ import lift from '../../assets/photos/common/pamporovo-lift-zima-ski.jpg';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
+const apartments = await getApartments();
 const bg = lang === 'bg';
 const s = t[lang];
 const alternates = { bg: '/bg/blog/ski-v-pamporovo/', en: '/en/blog/skining-pamporovo/' };
@@ -46,9 +47,6 @@ const jsonLd = [
 ];
 ---
 <Base lang={lang} title={title} description={desc} alternates={alternates} ogImage={cover} jsonLd={jsonLd}>
-  <Fragment slot="footer-apartments">
-    <ul class="footer__list">{apartments.map((a) => <li><a href={`/${lang}/${a.slug[lang]}/`}>{a.name[lang]}</a></li>)}</ul>
-  </Fragment>
   <article class="article">
     <ol class="crumbs" style="padding:0"><li><a href={s.home}>{s.breadcrumbsHome}</a></li><li aria-current="page">{s.nav.ski}</li></ol>
     {bg ? (
@@ -83,7 +81,7 @@ const jsonLd = [
           <li>София: около 240 км</li>
         </ul>
         <h2>Къде да отседнете</h2>
-        <p>Изберете между нашите три апартамента близо до ски център Малина, всеки с тераса към гората, оборудвана кухня и място за 4–5 гости.</p>
+        <p>Изберете апартамент в комплекс „Елит Пампорово“ близо до ски център Малина и се свържете директно с домакина му.</p>
       </>
     ) : (
       <>
@@ -117,7 +115,7 @@ const jsonLd = [
           <li>Sofia: about 240 km</li>
         </ul>
         <h2>Where to stay</h2>
-        <p>Choose one of our three apartments close to Malina Ski Center, each with a forest-view terrace, full kitchen and room for 4–5 guests.</p>
+        <p>Pick an apartment in the Elit Pamporovo complex close to Malina Ski Center and contact its host directly.</p>
       </>
     )}
   </article>
